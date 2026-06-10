@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Echo Labs — Invoice & Quote Generator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js"></script>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{--dark:#1a1a1c;--cream:#f0ede5;--muted:rgba(26,26,28,.4);--border:rgba(26,26,28,.12);--ib:rgba(26,26,28,.18);--white:#fff;--r:10px}
+  body{background:var(--cream);color:var(--dark);font-family:'Geist',-apple-system,sans-serif;font-weight:400;line-height:1.5;-webkit-font-smoothing:antialiased}
+  .nav{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+  .nav .wm{font-size:17px;font-weight:500;letter-spacing:-.03em}
+  .nav .sub{font-size:10px;color:var(--muted)}
+  .tabs{display:flex;padding:0 20px;border-bottom:1px solid var(--border)}
+  .tab{padding:12px 20px;font-size:14px;font-weight:400;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:inherit;text-transform:capitalize}
+  .tab.active{font-weight:500;color:var(--dark);border-bottom-color:var(--dark)}
+  .wrap{max-width:720px;margin:0 auto;padding:24px 20px 80px}
+  label.fl{display:block;font-size:12px;font-weight:500;margin-bottom:4px}
+  input,select,textarea{width:100%;background:var(--white);border:1.5px solid var(--ib);border-radius:var(--r);padding:10px 12px;font-family:inherit;font-size:14px;color:var(--dark);outline:none}
+  input:focus,select:focus,textarea:focus{border-color:rgba(26,26,28,.45);box-shadow:0 0 0 3px rgba(26,26,28,.06)}
+  textarea{resize:vertical;min-height:55px}
+  .field{margin-bottom:14px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+  .item{background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:12px;margin-bottom:8px}
+  .item .amt{font-size:12px;color:var(--muted)}
+  .item .rm{background:none;border:none;color:#c44;font-size:12px;cursor:pointer;font-family:inherit;padding:4px 8px}
+  .additem{background:none;border:1.5px dashed var(--ib);border-radius:var(--r);padding:10px 16px;font-size:13px;color:var(--muted);cursor:pointer;font-family:inherit;width:100%}
+  .totals{background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:14px 18px;margin:6px 0 18px}
+  .totals .row{display:flex;justify-content:space-between;align-items:center}
+  .totals .sub{margin-bottom:6px;font-size:13px;color:var(--muted)}
+  .totals .sub b{color:var(--dark);font-weight:400}
+  .totals .tot{padding-top:8px;border-top:1px solid var(--border);font-size:15px;font-weight:600}
+  .status{padding:10px 14px;background:rgba(26,26,28,.05);border-radius:var(--r);font-size:13px;text-align:center;margin-bottom:12px}
+  .gen{width:100%;background:var(--dark);color:var(--cream);font-family:inherit;font-size:15px;font-weight:500;padding:14px 0;border:none;border-radius:999px;cursor:pointer}
+  .gen:disabled{opacity:.5;cursor:not-allowed}
+  .sech{font-size:12px;font-weight:500;margin:6px 0 8px}
+</style>
+</head>
+<body>
+  <div class="nav"><span class="wm">echo labs</span><span class="sub">Document Generator</span></div>
+  <div class="tabs">
+    <button class="tab active" data-tab="invoice">invoice</button>
+    <button class="tab" data-tab="quote">quote</button>
+  </div>
+  <div class="wrap">
+    <div class="grid2">
+      <div class="field"><label class="fl" id="lbl-ref">Invoice #</label><input id="refNumber"></div>
+      <div class="field"><label class="fl" id="lbl-date">Invoice Date</label><input type="date" id="date"></div>
+    </div>
+    <div class="grid2" id="invoice-dates">
+      <div class="field"><label class="fl">Terms</label>
+        <select id="terms"><option>Due on Receipt</option><option>Net 15</option><option>Net 30</option><option>Net 60</option></select>
+      </div>
+      <div class="field"><label class="fl">Due Date</label><input type="date" id="dueDate"></div>
+    </div>
+    <div class="field" id="quote-dates" style="display:none"><label class="fl">Expiry Date</label><input type="date" id="expiryDate"></div>
+
+    <div class="field"><label class="fl">Bill To (Client Name)</label><input id="clientName" placeholder="e.g. Unveiled Worship"></div>
+    <div class="field"><label class="fl">Subject</label><input id="subject" placeholder="e.g. Production quote for 2027 event"></div>
+
+    <label class="fl sech">Line Items</label>
+    <div id="items"></div>
+    <button class="additem" id="addItem">+ Add line item</button>
+
+    <div class="totals">
+      <div class="row sub"><span>Sub Total</span><b id="subTotal">$0.00</b></div>
+      <div class="row tot"><span id="totLabel">Balance Due</span><span id="grandTotal">$0.00</span></div>
+    </div>
+
+    <div class="field"><label class="fl">Notes</label><textarea id="notes">Thank you for your business</textarea></div>
+    <div class="field" id="tc-field" style="display:none"><label class="fl">Terms &amp; Conditions</label><textarea id="termsConditions">This quote is valid for 90 days</textarea></div>
+
+    <div class="status" id="status" style="display:none"></div>
+    <button class="gen" id="generate">Download Invoice PDF</button>
+  </div>
+
+<script>
+const COMPANY={name:"Echo Labs Group",address:["Australia"],phone:"0449011913",email:"team@echolabsgroup.com",website:"www.echolabsgroup.com",bsb:"735306",accountNo:"504743",payId:"0449011913"};
+let tab="invoice";
+let items=[{description:"",qty:1,rate:0,discount:0}];
+
+const $=id=>document.getElementById(id);
+const fmt=n=>n.toLocaleString("en-AU",{minimumFractionDigits:2,maximumFractionDigits:2});
+const today=()=>new Date().toISOString().split("T")[0];
+const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x.toISOString().split("T")[0]};
+const fmtDate=s=>{if(!s)return"";const d=new Date(s+"T00:00:00");return d.toLocaleDateString("en-AU",{day:"2-digit",month:"2-digit",year:"numeric"})};
+const genId=t=>{const n=Math.floor(Math.random()*9000)+1000;return(t==="invoice"?"INV-":"QT-")+n};
+
+// init
+$("refNumber").value=genId("invoice");
+$("date").value=today();
+$("dueDate").value=today();
+$("expiryDate").value=addDays(today(),90);
+
+function renderItems(){
+  const c=$("items");c.innerHTML="";
+  items.forEach((it,idx)=>{
+    const amt=it.qty*it.rate*(1-it.discount/100);
+    const div=document.createElement("div");div.className="item";
+    div.innerHTML=`
+      <div class="field"><label class="fl">Description</label><input data-i="${idx}" data-f="description" value="${it.description.replace(/"/g,'&quot;')}" placeholder="Item description"></div>
+      <div class="grid3">
+        <div class="field"><label class="fl">Qty</label><input type="number" min="0" step="0.01" data-i="${idx}" data-f="qty" value="${it.qty}"></div>
+        <div class="field"><label class="fl">Rate ($)</label><input type="number" min="0" step="0.01" data-i="${idx}" data-f="rate" value="${it.rate}"></div>
+        <div class="field"><label class="fl">Discount %</label><input type="number" min="0" max="100" step="0.01" data-i="${idx}" data-f="discount" value="${it.discount}"></div>
+      </div>
+      <div class="row" style="display:flex;justify-content:space-between;align-items:center">
+        <span class="amt">Amount: $${fmt(amt)}</span>
+        ${items.length>1?`<button class="rm" data-rm="${idx}">Remove</button>`:""}
+      </div>`;
+    c.appendChild(div);
+  });
+  c.querySelectorAll("input").forEach(inp=>{
+    inp.addEventListener("input",e=>{
+      const i=+e.target.dataset.i,f=e.target.dataset.f;
+      items[i][f]=(f==="description")?e.target.value:(parseFloat(e.target.value)||0);
+      updateTotals();
+      if(f!=="description")renderItemAmount(i);
+    });
+  });
+  c.querySelectorAll("[data-rm]").forEach(b=>b.addEventListener("click",e=>{
+    items.splice(+e.target.dataset.rm,1);renderItems();updateTotals();
+  }));
+}
+function renderItemAmount(i){
+  const it=items[i];const amt=it.qty*it.rate*(1-it.discount/100);
+  const spans=$("items").querySelectorAll(".amt");
+  if(spans[i])spans[i].textContent="Amount: $"+fmt(amt);
+}
+function updateTotals(){
+  const sub=items.reduce((s,i)=>s+i.qty*i.rate*(1-i.discount/100),0);
+  $("subTotal").textContent="$"+fmt(sub);
+  $("grandTotal").textContent="$"+fmt(sub);
+}
+
+$("addItem").addEventListener("click",()=>{items.push({description:"",qty:1,rate:0,discount:0});renderItems()});
+
+document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+  t.classList.add("active");
+  tab=t.dataset.tab;
+  $("refNumber").value=genId(tab);
+  $("lbl-ref").textContent=tab==="invoice"?"Invoice #":"Quote #";
+  $("lbl-date").textContent=tab==="invoice"?"Invoice Date":"Quote Date";
+  $("invoice-dates").style.display=tab==="invoice"?"grid":"none";
+  $("quote-dates").style.display=tab==="invoice"?"none":"block";
+  $("tc-field").style.display=tab==="invoice"?"none":"block";
+  $("totLabel").textContent=tab==="invoice"?"Balance Due":"Total";
+  $("notes").value=tab==="quote"?"Looking forward to your business":"Thank you for your business";
+  $("generate").textContent=tab==="invoice"?"Download Invoice PDF":"Download Quote PDF";
+  $("status").style.display="none";
+}));
+
+function setStatus(msg){const s=$("status");s.textContent=msg;s.style.display="block"}
+
+function drawPDF(doc,data,type){
+  const W=210,margin=18,contentW=W-margin*2;
+  const dark=[26,26,28],muted=[120,120,122],headerBg=[245,243,238],dueBg=[240,237,229];
+  let y=20;
+  doc.setFont("helvetica","bold");doc.setFontSize(16);doc.setTextColor(...dark);
+  doc.text(".) echo labs",margin,y);
+  doc.setFont("helvetica","normal");doc.setFontSize(7);doc.setTextColor(...muted);
+  doc.text("Plugged In. Stage Ready.",margin,y+4);
+  doc.setFont("helvetica","bold");doc.setFontSize(24);doc.setTextColor(...dark);
+  doc.text(type==="invoice"?"Invoice":"Quote",W-margin,y+2,{align:"right"});
+  doc.setFont("helvetica","normal");doc.setFontSize(9);doc.setTextColor(...muted);
+  doc.text("# "+data.refNumber,W-margin,y+8,{align:"right"});
+  y+=18;
+  const compTop=y;
+  doc.setFont("helvetica","bold");doc.setFontSize(10);doc.setTextColor(...dark);
+  doc.text(COMPANY.name,margin,y);y+=5;
+  doc.setFont("helvetica","normal");doc.setFontSize(9);doc.setTextColor(...muted);
+  [...COMPANY.address,COMPANY.phone,COMPANY.email,COMPANY.website].forEach(l=>{doc.text(l,margin,y);y+=4});
+  let ry=compTop;
+  if(type==="invoice"){
+    doc.setFont("helvetica","normal");doc.setFontSize(9);doc.setTextColor(...muted);
+    doc.text("Balance Due",W-margin,ry,{align:"right"});
+    doc.setFont("helvetica","bold");doc.setFontSize(16);doc.setTextColor(...dark);
+    doc.text("$"+fmt(data.total),W-margin,ry+7,{align:"right"});ry+=16;
+  }
+  doc.setFontSize(9);const lblX=128,valX=W-margin;
+  const dr=(l,v)=>{doc.setFont("helvetica","normal");doc.setTextColor(...muted);doc.text(l,lblX,ry);doc.setTextColor(...dark);doc.text(v,valX,ry,{align:"right"});ry+=5};
+  if(type==="invoice"){dr("Invoice Date :",fmtDate(data.date));dr("Terms :",data.terms);dr("Due Date :",fmtDate(data.dueDate));}
+  else{dr("Quote Date :",fmtDate(data.date));dr("Expiry Date :",fmtDate(data.expiryDate));}
+  y=Math.max(y,ry)+4;
+  doc.setFont("helvetica","normal");doc.setFontSize(9);doc.setTextColor(...muted);
+  doc.text("Bill To",margin,y);y+=5;
+  doc.setFont("helvetica","bold");doc.setFontSize(10);doc.setTextColor(...dark);
+  doc.text(data.clientName,margin,y);y+=7;
+  if(data.subject){
+    doc.setFont("helvetica","normal");doc.setFontSize(9);doc.setTextColor(...muted);
+    doc.text("Subject :",margin,y);y+=4;doc.setTextColor(...dark);
+    const sl=doc.splitTextToSize(data.subject,contentW);doc.text(sl,margin,y);y+=sl.length*4+4;
+  }else{y+=2}
+  const hasDisc=data.items.some(i=>i.discount>0);
+  const colX=hasDisc?{num:margin,desc:margin+10,qty:118,rate:138,disc:158,amt:W-margin}:{num:margin,desc:margin+10,qty:130,rate:152,amt:W-margin};
+  doc.setFillColor(...headerBg);doc.rect(margin,y,contentW,8,"F");
+  doc.setFont("helvetica","bold");doc.setFontSize(9);doc.setTextColor(...dark);
+  doc.text("#",colX.num+1,y+5.5);doc.text("Item & Description",colX.desc,y+5.5);
+  doc.text("Qty",colX.qty,y+5.5,{align:"right"});doc.text("Rate",colX.rate,y+5.5,{align:"right"});
+  if(hasDisc)doc.text("Discount",colX.disc,y+5.5,{align:"right"});
+  doc.text("Amount",colX.amt,y+5.5,{align:"right"});y+=8;
+  doc.setFont("helvetica","normal");
+  data.items.forEach((it,i)=>{
+    const amt=it.qty*it.rate*(1-it.discount/100);
+    const dl=doc.splitTextToSize(it.description,colX.qty-colX.desc-4);
+    const rh=Math.max(8,dl.length*4+4);doc.setTextColor(...dark);
+    doc.text((i+1).toString(),colX.num+1,y+5);doc.text(dl,colX.desc,y+5);
+    doc.text(it.qty.toFixed(2),colX.qty,y+5,{align:"right"});doc.text(it.rate.toFixed(2),colX.rate,y+5,{align:"right"});
+    if(hasDisc)doc.text(it.discount>0?it.discount.toFixed(2)+"%":"0.00",colX.disc,y+5,{align:"right"});
+    doc.text(fmt(amt),colX.amt,y+5,{align:"right"});y+=rh;
+    doc.setDrawColor(224,221,214);doc.setLineWidth(0.2);doc.line(margin,y,W-margin,y);
+  });
+  y+=4;const tLblX=130,tValX=W-margin;
+  doc.setFont("helvetica","normal");doc.setFontSize(9);doc.setTextColor(...muted);
+  doc.text("Sub Total",tLblX,y+4);doc.setTextColor(...dark);doc.text(fmt(data.subtotal),tValX,y+4,{align:"right"});y+=8;
+  doc.setFillColor(...headerBg);doc.rect(tLblX-3,y,(W-margin)-(tLblX-3)+3,8,"F");
+  doc.setFont("helvetica","bold");doc.setFontSize(10);doc.setTextColor(...dark);
+  doc.text("Total",tLblX,y+5.5);doc.text("$"+fmt(data.total),tValX,y+5.5,{align:"right"});y+=8;
+  if(type==="invoice"){
+    doc.setFillColor(...dueBg);doc.rect(tLblX-3,y,(W-margin)-(tLblX-3)+3,8,"F");
+    doc.setFont("helvetica","bold");doc.setTextColor(...dark);
+    doc.text("Balance Due",tLblX,y+5.5);doc.text("$"+fmt(data.total),tValX,y+5.5,{align:"right"});y+=8;
+  }
+  y+=12;
+  if(data.notes){
+    doc.setFont("helvetica","bold");doc.setFontSize(10);doc.setTextColor(...dark);
+    doc.text("Notes",margin,y);y+=5;doc.setFont("helvetica","normal");doc.setFontSize(9);
+    const nl=doc.splitTextToSize(data.notes,contentW);doc.text(nl,margin,y);y+=nl.length*4+3;
+  }
+  doc.setFont("helvetica","bold");doc.setFontSize(9);doc.setTextColor(...dark);
+  doc.text("Payment — Bank Transfer",margin,y);y+=4;
+  doc.setFont("helvetica","normal");
+  doc.text("BSB: "+COMPANY.bsb,margin,y);y+=4;
+  doc.text("Account No: "+COMPANY.accountNo,margin,y);y+=4;
+  doc.text("Pay ID: "+COMPANY.payId,margin,y);
+  if(type==="quote"&&data.termsConditions){
+    y+=10;doc.setFont("helvetica","bold");doc.setFontSize(10);
+    doc.text("Terms & Conditions",margin,y);y+=5;
+    doc.setFont("helvetica","normal");doc.setFontSize(9);
+    const tl=doc.splitTextToSize(data.termsConditions,contentW);doc.text(tl,margin,y);
+  }
+}
+
+$("generate").addEventListener("click",()=>{
+  const clientName=$("clientName").value.trim();
+  if(!clientName){setStatus("Please enter a client name");return}
+  const valid=items.filter(i=>i.description.trim());
+  if(!valid.length){setStatus("Please add at least one line item");return}
+  if(!window.jspdf){setStatus("PDF library still loading — wait a moment and try again.");return}
+  const sub=valid.reduce((s,i)=>s+i.qty*i.rate*(1-i.discount/100),0);
+  const data={refNumber:$("refNumber").value,clientName,subject:$("subject").value.trim(),
+    date:$("date").value,dueDate:$("dueDate").value,expiryDate:$("expiryDate").value,
+    terms:$("terms").value,notes:$("notes").value.trim(),termsConditions:$("termsConditions").value.trim(),
+    items:valid,subtotal:sub,total:sub};
+  const {jsPDF}=window.jspdf;const doc=new jsPDF({unit:"mm",format:"a4"});
+  drawPDF(doc,data,tab);
+  const fn=(tab==="invoice"?"Invoice_":"Quote_")+clientName.replace(/\s+/g,"_")+"_"+data.refNumber+".pdf";
+  doc.save(fn);
+  setStatus("Done — check your downloads.");
+});
+
+renderItems();updateTotals();
+</script>
+</body>
+</html>
