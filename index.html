@@ -465,8 +465,13 @@
 
       <div class="field">
         <label>Project date or timeline <span class="req">*</span></label>
-        <p class="hint">If exact date isn't set yet, give us your best estimate</p>
-        <input type="text" name="timeline" required />
+        <p class="hint">Pick a date if you have one, or describe your timeline if it's not locked in yet</p>
+        <div class="date-toggle">
+          <label class="option-label"><input type="radio" name="date_mode" value="exact" checked>I have a date</label>
+          <label class="option-label"><input type="radio" name="date_mode" value="estimate">Not sure yet</label>
+        </div>
+        <input type="date" name="event_date" id="event-date-input" style="margin-top:14px;" />
+        <input type="text" name="timeline_estimate" id="timeline-estimate-input" placeholder="e.g. mid-March, sometime in Q3, flexible" style="margin-top:14px; display:none;" />
       </div>
 
       <div class="field">
