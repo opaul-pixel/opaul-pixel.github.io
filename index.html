@@ -288,6 +288,30 @@
       display: block;
     }
 
+    /* ── DATE TOGGLE ── */
+    .date-toggle {
+      display: flex;
+      gap: 10px;
+    }
+    input[type="date"] {
+      width: 100%;
+      background: var(--cream);
+      border: 1.5px solid var(--input-border);
+      border-radius: var(--radius);
+      padding: 13px 16px;
+      font-family: 'Geist', -apple-system, sans-serif;
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--dark);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      -webkit-appearance: none;
+    }
+    input[type="date"]:focus {
+      border-color: rgba(26,26,28,0.45);
+      box-shadow: 0 0 0 3px rgba(26,26,28,0.06);
+    }
+
     /* ── SUBMIT ── */
     .submit-row { margin-top: 40px; }
 
@@ -465,13 +489,8 @@
 
       <div class="field">
         <label>Project date or timeline <span class="req">*</span></label>
-        <p class="hint">Pick a date if you have one, or describe your timeline if it's not locked in yet</p>
-        <div class="date-toggle">
-          <label class="option-label"><input type="radio" name="date_mode" value="exact" checked>I have a date</label>
-          <label class="option-label"><input type="radio" name="date_mode" value="estimate">Not sure yet</label>
-        </div>
-        <input type="date" name="event_date" id="event-date-input" style="margin-top:14px;" />
-        <input type="text" name="timeline_estimate" id="timeline-estimate-input" placeholder="e.g. mid-March, sometime in Q3, flexible" style="margin-top:14px; display:none;" />
+        <p class="hint">If exact date isn't set yet, give us your best estimate</p>
+        <input type="date" name="event_date" id="event-date-input" />
       </div>
 
       <div class="field">
@@ -541,6 +560,22 @@
             r.checked = false;
             r.closest('.option-label').classList.remove('selected');
           });
+        }
+      });
+    });
+
+    document.querySelectorAll('input[name="date_mode"]').forEach(function(radio) {
+      radio.addEventListener('change', function() {
+        var dateInput = document.getElementById('event-date-input');
+        var estInput = document.getElementById('timeline-estimate-input');
+        if (this.value === 'exact') {
+          dateInput.style.display = 'block';
+          estInput.style.display = 'none';
+          estInput.value = '';
+        } else {
+          dateInput.style.display = 'none';
+          estInput.style.display = 'block';
+          dateInput.value = '';
         }
       });
     });
