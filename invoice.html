@@ -697,6 +697,8 @@ $("generate").addEventListener("click",()=>{
         terms:data.terms
       }));
       var beacon=new Image();
+      beacon.onload=function(){setStatus("Done — PDF downloaded and logged \u2713");};
+      beacon.onerror=function(){setStatus("Done — PDF downloaded, but logging failed \u2717");};
       beacon.src=SHEET_URL+"?payload="+payload+"&t="+Date.now();
     }catch(err){/* logging never blocks the download */}
   }
