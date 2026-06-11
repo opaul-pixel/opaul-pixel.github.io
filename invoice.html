@@ -681,26 +681,26 @@ $("generate").addEventListener("click",()=>{
   doc.save(fn);
   setStatus("Done — check your downloads.");
 
-  // Log to Google Sheet (fire-and-forget; download already succeeded)
+  // Log to Google Sheet via image beacon (works in webviews + blockers)
   if(SHEET_URL){
     try{
-      fetch(SHEET_URL,{
-        method:"POST",
-        mode:"no-cors",
-        headers:{"Content-Type":"text/plain;charset=utf-8"},
-        body:JSON.stringify({
-          type:tab,
-          refNumber:data.refNumber,
-          clientName:data.clientName,
-          subject:data.subject,
-          items:data.items,
-          total:fmt(data.total),
-          date:fmtDate(data.date),
-          dueDate:fmtDate(data.dueDate),
-          expiryDate:fmtDate(data.expiryDate),
-          terms:data.terms
-        })
-      });
+      var payload=encodeURIComponent(JSON.stringify({
+        type:tab,
+        refNumber:data.refNumber,
+        clientName:data.clientName,
+        subject:data.subject,
+        items:data.items,
+        total:fmt(data.total),
+        date:fmtDate(data.date),
+        dueDate:fmtDate(data.dueDate),
+        expiryDate:fmtDate(data.expiryDate),
+        terms:data.terms
+      }));
+      var beacon=new Image();
+      beacon.src=SHEET_URL+"?payload="+payload+"&t="+Date.now();
+    }catch(err){/* logging never blocks the download */}
+  }
+});
     }catch(err){/* logging failure never blocks the download */}
   }
 });
