@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..900,0..100,0..1&family=DM+Sans:opsz,wght@9..40,300..700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f1ebe1; --paper: #faf6ef; --ink: #1c1a17; --ink-soft: #6b655c;
+      --accent: #b85436; --accent-soft: #f0d9cf; --hairline: #d9d0c2;
+      --display: 'Fraunces', 'Cormorant Garamond', Georgia, serif;
+      --body: 'DM Sans', system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin:0; padding:0; min-height:100vh; min-height:100dvh; background:var(--bg); color:var(--ink); font-family:var(--body); -webkit-font-smoothing:antialiased; }
+    body::before { content:""; position:fixed; inset:0; pointer-events:none; background-image:radial-gradient(rgba(28,26,23,0.035) 1px, transparent 1px); background-size:3px 3px; mix-blend-mode:multiply; z-index:0; }
+    .stage { position:relative; z-index:1; min-height:100vh; min-height:100dvh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:32px 20px 48px; }
+    .rule { width:32px; height:1px; background:var(--accent); margin-bottom:24px; opacity:0; animation:fade-in .6s .1s forwards; }
+    h1 { font-family:var(--display); font-weight:400; font-style:italic; font-variation-settings:"opsz" 144,"SOFT" 50; font-size:clamp(48px,12vw,72px); line-height:.95; margin:0 0 8px; letter-spacing:-.02em; text-align:center; opacity:0; animation:fade-in .7s .15s forwards; }
+    .subtitle { font-size:13px; letter-spacing:.22em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 40px; text-align:center; opacity:0; animation:fade-in .6s .25s forwards; }
+    .card { width:100%; max-width:380px; background:var(--paper); border:1px solid var(--hairline); border-radius:4px; padding:32px 28px; box-shadow:0 1px 0 rgba(28,26,23,0.04),0 24px 40px -28px rgba(28,26,23,0.18); opacity:0; transform:translateY(8px); animation:rise .7s .3s forwards; }
+    label { display:block; font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:10px; }
+    input { width:100%; padding:14px 0; font-family:var(--body); font-size:18px; color:var(--ink); background:transparent; border:none; border-bottom:1px solid var(--hairline); border-radius:0; outline:none; transition:border-color .2s; -webkit-appearance:none; }
+    input:focus { border-bottom-color:var(--accent); }
+    input::placeholder { color:#b5ad9f; }
+    button { margin-top:24px; width:100%; padding:16px; font-family:var(--body); font-size:13px; font-weight:500; letter-spacing:.22em; text-transform:uppercase; color:var(--paper); background:var(--ink); border:none; border-radius:2px; cursor:pointer; transition:background .2s,transform .1s; }
+    button:hover:not(:disabled) { background:var(--accent); }
+    button:active:not(:disabled) { transform:translateY(1px); }
+    button:disabled { opacity:.5; cursor:default; }
+    .result { margin-top:24px; opacity:0; transform:translateY(6px); transition:opacity .4s,transform .4s; }
+    .result.show { opacity:1; transform:translateY(0); }
+    .result.success { text-align:center; padding-top:8px; border-top:1px solid var(--hairline); }
+    .greeting { font-size:12px; letter-spacing:.22em; text-transform:uppercase; color:var(--ink-soft); margin:24px 0 4px; }
+    .name { font-family:var(--display); font-weight:400; font-size:22px; margin:0 0 24px; letter-spacing:-.01em; }
+    .table-label { font-size:11px; letter-spacing:.24em; text-transform:uppercase; color:var(--accent); margin-bottom:4px; }
+    .table-number { font-family:var(--display); font-style:italic; font-variation-settings:"opsz" 144,"SOFT" 60,"WONK" 1; font-weight:400; font-size:clamp(72px,22vw,104px); line-height:1; color:var(--ink); margin:4px 0 8px; }
+    .result.error { padding:14px 16px; background:var(--accent-soft); border-left:2px solid var(--accent); color:#6e2a16; font-size:14px; line-height:1.5; }
+    .footer { margin-top:32px; font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--ink-soft); opacity:0; animation:fade-in .6s .5s forwards; }
+    @keyframes fade-in { to { opacity:1; } }
+    @keyframes rise { to { opacity:1; transform:translateY(0); } }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <div class="rule"></div>
+    <h1 id="title">Welcome</h1>
+    <p class="subtitle" id="subtitle">Find your seat</p>
+    <div class="card">
+      <label for="input">Phone number</label>
+      <input id="input" type="tel" inputmode="tel" autocomplete="off" placeholder="0412 345 678" aria-label="Phone number" />
+      <button id="btn" type="button">Find my table</button>
+      <div id="result" class="result" aria-live="polite"></div>
+    </div>
+    <div class="footer">Please ask a host if you need help</div>
+  </div>
+
+  <script>
+  /* ===== CONFIG — the only part you edit ===== */
+  const CONFIG = {
+    EXEC_URL: "https://script.google.com/macros/s/AKfycbze05ZNhk745G1r8v1oYYWoSjN9nVgaZQu4R46_r8p4Qwi4osvyvaD7HLZq8AGyVgFR/exec",
+    EVENT_TITLE: "Dr Michaels 50th",
+    EVENT_SUBTITLE: "Find your seat",
+    NAME_FALLBACK: true,
+    TIMEOUT_MS: 9000
+  };
+  /* ========================================== */
+
+  const input = document.getElementById('input');
+  const btn = document.getElementById('btn');
+  const result = document.getElementById('result');
+
+  (function () {
+    if (CONFIG.EVENT_TITLE) document.getElementById('title').textContent = CONFIG.EVENT_TITLE;
+    if (CONFIG.EVENT_SUBTITLE) document.getElementById('subtitle').textContent = CONFIG.EVENT_SUBTITLE;
+    document.title = CONFIG.EVENT_TITLE || 'Find your seat';
+    if (CONFIG.NAME_FALLBACK) {
+      document.querySelector('label').textContent = 'Phone number or name';
+      input.placeholder = 'Phone or name';
+      input.type = 'text';
+      input.inputMode = 'text';
+    }
+  })();
+
+  function jsonp(params) {
+    return new Promise(function (resolve, reject) {
+      const cb = '__seat_' + Math.random().toString(36).slice(2);
+      const q = new URLSearchParams(Object.assign({}, params, { callback: cb })).toString();
+      const s = document.createElement('script');
+      let done = false;
+      const cleanup = function () { delete window[cb]; s.remove(); clearTimeout(timer); };
+      const timer = setTimeout(function () { if (!done) { done = true; cleanup(); reject(new Error('timeout')); } }, CONFIG.TIMEOUT_MS);
+      window[cb] = function (data) { if (!done) { done = true; cleanup(); resolve(data); } };
+      s.onerror = function () { if (!done) { done = true; cleanup(); reject(new Error('network')); } };
+      s.src = CONFIG.EXEC_URL + '?' + q;
+      document.body.appendChild(s);
+    });
+  }
+
+  btn.addEventListener('click', lookup);
+  input.addEventListener('keypress', function (e) { if (e.key === 'Enter') lookup(); });
+
+  function lookup() {
+    const v = input.value;
+    if (!v || !v.trim()) { input.focus(); return; }
+    btn.disabled = true;
+    btn.textContent = 'Searching\u2026';
+    result.classList.remove('show');
+    result.className = 'result';
+    result.innerHTML = '';
+    jsonp({ action: 'lookupSeat', q: v }).then(onResult).catch(onError);
+  }
+
+  function onResult(data) {
+    btn.disabled = false;
+    btn.textContent = 'Find my table';
+    if (data && data.status === 'success') {
+      result.className = 'result success';
+      result.innerHTML =
+        '<div class="greeting">Hello</div>' +
+        '<div class="name">' + escapeHtml(data.name) + '</div>' +
+        '<div class="table-label">Your table</div>' +
+        '<div class="table-number">' + escapeHtml(data.table) + '</div>';
+    } else {
+      result.className = 'result error';
+      result.textContent = (data && data.message) || "Couldn't find that entry.";
+    }
+    requestAnimationFrame(function () { result.classList.add('show'); });
+  }
+
+  function onError() {
+    btn.disabled = false;
+    btn.textContent = 'Find my table';
+    result.className = 'result error';
+    result.textContent = "Couldn't reach the seating list. Check your connection and try again.";
+    requestAnimationFrame(function () { result.classList.add('show'); });
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+  </script>
+</body>
+</html>
