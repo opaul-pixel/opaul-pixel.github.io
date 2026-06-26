@@ -17,7 +17,8 @@
     * { box-sizing: border-box; }
     html, body { margin:0; padding:0; min-height:100vh; min-height:100dvh; background:var(--bg); color:var(--ink); font-family:var(--body); -webkit-font-smoothing:antialiased; }
     body::before { content:""; position:fixed; inset:0; pointer-events:none; background-image:radial-gradient(rgba(28,26,23,0.035) 1px, transparent 1px); background-size:3px 3px; mix-blend-mode:multiply; z-index:0; }
-    .stage { position:relative; z-index:1; min-height:100vh; min-height:100dvh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:32px 20px 48px; }
+    .stage { position:relative; z-index:1; min-height:100vh; min-height:100dvh; display:flex; flex-direction:column; padding:32px 20px calc(24px + env(safe-area-inset-bottom)); }
+    .main { flex:1 0 auto; display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%; }
     .rule { width:32px; height:1px; background:var(--accent); margin-bottom:24px; opacity:0; animation:fade-in .6s .1s forwards; }
     h1 { font-family:var(--display); font-weight:400; font-style:italic; font-variation-settings:"opsz" 144,"SOFT" 50; font-size:clamp(48px,12vw,72px); line-height:.95; margin:0 0 8px; letter-spacing:-.02em; text-align:center; opacity:0; animation:fade-in .7s .15s forwards; }
     .subtitle { font-size:13px; letter-spacing:.22em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 40px; text-align:center; opacity:0; animation:fade-in .6s .25s forwards; }
@@ -39,12 +40,20 @@
     .table-number { font-family:var(--display); font-style:italic; font-variation-settings:"opsz" 144,"SOFT" 60,"WONK" 1; font-weight:400; font-size:clamp(72px,22vw,104px); line-height:1; color:var(--ink); margin:4px 0 8px; }
     .result.error { padding:14px 16px; background:var(--accent-soft); border-left:2px solid var(--accent); color:#6e2a16; font-size:14px; line-height:1.5; }
     .footer { margin-top:32px; font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--ink-soft); opacity:0; animation:fade-in .6s .5s forwards; }
+    .credit { margin-top:18px; display:flex; flex-direction:column; align-items:center; gap:6px; text-align:center; opacity:0; animation:fade-in .6s .6s forwards; }
+    .credit a { text-decoration:none; transition:color .2s; }
+    .credit-by { font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--ink-soft); }
+    .credit-by span { color:var(--accent); }
+    .credit-by:hover { color:var(--accent); }
+    .credit-tag { font-family:var(--display); font-style:italic; font-size:15px; letter-spacing:.01em; color:var(--ink); }
+    .credit-tag:hover { color:var(--accent); }
     @keyframes fade-in { to { opacity:1; } }
     @keyframes rise { to { opacity:1; transform:translateY(0); } }
   </style>
 </head>
 <body>
   <div class="stage">
+    <div class="main">
     <div class="rule"></div>
     <h1 id="title">Welcome</h1>
     <p class="subtitle" id="subtitle">Find your seat</p>
@@ -55,6 +64,11 @@
       <div id="result" class="result" aria-live="polite"></div>
     </div>
     <div class="footer">Please ask a host if you need help</div>
+    </div>
+    <div class="credit">
+      <a class="credit-by" href="https://echolabsgroup.com" target="_blank" rel="noopener noreferrer">Brought to you by <span>echolabsgroup.com</span></a>
+      <a class="credit-tag" href="https://echolabsgroup.com" target="_blank" rel="noopener noreferrer">Plugged In. Stage Ready.</a>
+    </div>
   </div>
 
   <script>
@@ -63,7 +77,7 @@
     EXEC_URL: "https://script.google.com/macros/s/AKfycbze05ZNhk745G1r8v1oYYWoSjN9nVgaZQu4R46_r8p4Qwi4osvyvaD7HLZq8AGyVgFR/exec",
     EVENT_TITLE: "Dr Michaels 50th",
     EVENT_SUBTITLE: "Find your seat",
-    NAME_FALLBACK: true,
+    NAME_FALLBACK: true,     // mirror ENABLE_NAME_FALLBACK in the script
     TIMEOUT_MS: 9000
   };
   /* ========================================== */
@@ -72,6 +86,7 @@
   const btn = document.getElementById('btn');
   const result = document.getElementById('result');
 
+  // Apply config locally (replaces the getConfig() round-trip)
   (function () {
     if (CONFIG.EVENT_TITLE) document.getElementById('title').textContent = CONFIG.EVENT_TITLE;
     if (CONFIG.EVENT_SUBTITLE) document.getElementById('subtitle').textContent = CONFIG.EVENT_SUBTITLE;
@@ -84,6 +99,7 @@
     }
   })();
 
+  // JSONP read: a <script> tag follows the Apps Script 302 redirect that breaks fetch() on iOS
   function jsonp(params) {
     return new Promise(function (resolve, reject) {
       const cb = '__seat_' + Math.random().toString(36).slice(2);
