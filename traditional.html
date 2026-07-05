@@ -270,7 +270,7 @@
     if(plus){
       if(!p1first || !NAME_RE.test(p1first)){ return fail("Enter your plus one's first name (letters only)."); }
       if(!p1last  || !NAME_RE.test(p1last)){  return fail("Enter your plus one's last name (letters only)."); }
-      if(p1phone && !PHONE_RE.test(p1phone)){ return fail("Plus one's number must start with 04 (10 digits), or leave it blank."); }
+      if(!PHONE_RE.test(p1phone)){ return fail("Enter your plus one's mobile, starting with 04, 10 digits total."); }
     }
 
     var wantsSR = att==='yes' && srVal()==='yes';
