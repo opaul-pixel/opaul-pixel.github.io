@@ -1,0 +1,15 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Echo Labs Group//Wedding//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:white-ceremony-2026@echolabsgroup.com
+DTSTAMP:20260706T000000Z
+DTSTART:20261212T013000Z
+DTEND:20261212T033000Z
+SUMMARY:Christian & Cristina - Church Ceremony
+LOCATION:Saint Gertrude's Parish\, 6 Justin St\, Smithfield NSW 2164
+DESCRIPTION:Please arrive by 12:30pm. Doors close at 12:45pm. A child-free celebration.
+END:VEVENT
+END:VCALENDAR
