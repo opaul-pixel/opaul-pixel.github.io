@@ -395,6 +395,17 @@
     @media (prefers-reduced-motion: reduce) {
       .ticker-track { animation: none; }
     }
+
+    /* ── HONEYPOT (spam trap; hidden from all real users) ── */
+    .hp {
+      position: absolute !important;
+      left: -9999px !important;
+      top: -9999px !important;
+      width: 1px; height: 1px;
+      opacity: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
   </style>
 </head>
 <body>
@@ -449,6 +460,9 @@
     </div>
 
     <form id="project-form" action="https://formspree.io/f/mgobzknr" method="POST">
+
+      <!-- Honeypot: real people never see or fill this. Bots do, and get dropped. -->
+      <input type="text" class="hp" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" />
 
       <div class="field">
         <label>Your Name <span class="req">*</span></label>
@@ -606,7 +620,8 @@
           venue: fd.get('venue') || '',
           needs: needs,
           details: fd.get('details') || '',
-          budget: fd.get('budget') || ''
+          budget: fd.get('budget') || '',
+          hp: fd.get('_gotcha') || ''
         }));
         var beacon = new Image();
         beacon.src = ENQUIRY_SHEET_URL + "?payload=" + payload + "&t=" + Date.now();
