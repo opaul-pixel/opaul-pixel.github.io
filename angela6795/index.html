@@ -8,16 +8,19 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#eef1f6; --card:#fbfaf7; --ink:#1c2230; --muted:#6b7280;
-    --line:#d9dee7; --accent:#1e3a6b; --accent-ink:#fff; --err:#b23a2e;
-    --hero-photo:url('angela.jpg');
+    --card:#fbf5e8; --card-alt:#f6ecda;
+    --ink:#1c2230; --muted:#7a705f;
+    --line:#e5d9c0;
+    --accent:#4a7fa3; --accent-hover:#3a6a8a; --accent-ink:#fff;
+    --err:#b23a2e;
+    --hero-photo:url('brett.jpg');
   }
   *{box-sizing:border-box}
   body{margin:0;min-height:100vh;color:#fff;font-family:Inter,system-ui,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;
     display:flex;align-items:center;justify-content:center;padding:34px 16px;
-    background-color:var(--accent);
-    background-image:linear-gradient(rgba(30,58,107,.74),rgba(30,58,107,.90)),var(--hero-photo);
-    background-size:cover;background-position:center}
+    background-color:#1e4260;
+    background-image:linear-gradient(rgba(20,51,76,.74),rgba(20,51,76,.92)),var(--hero-photo);
+    background-size:cover;background-position:center;background-attachment:fixed}
   .stage{width:100%;max-width:460px}
   .hero{text-align:center;margin:0 0 24px}
   .names{font-family:Fraunces,serif;font-weight:500;font-size:42px;line-height:1.04;margin:0}
@@ -31,8 +34,15 @@
   .cell .n{display:block;font-family:Fraunces,serif;font-weight:500;font-size:22px;line-height:1}
   .cell .u{display:block;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;opacity:.8;margin-top:3px}
   .cd-done{margin:6px 0 0;font-family:Fraunces,serif;font-style:italic;font-size:15px;opacity:.95}
+
   .card{background:var(--card);color:var(--ink);border-radius:16px;padding:22px 20px}
-  label{display:block;font-weight:500;font-size:14px;margin:0 0 6px}
+  .card + .card{margin-top:16px}
+
+  .bio{text-align:center}
+  .bio .pull{font-family:Fraunces,serif;font-style:italic;font-weight:500;font-size:22px;line-height:1.3;margin:0 0 14px;color:var(--ink)}
+  .bio .body{font-size:15px;color:#403830;margin:0}
+
+  label{display:block;font-weight:500;font-size:14px;margin:0 0 6px;color:var(--ink)}
   .field{margin:0 0 16px}
   input[type=text],input[type=tel],textarea{width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:10px;font-size:16px;background:#fff;color:var(--ink);font-family:inherit}
   textarea{resize:vertical;min-height:80px}
@@ -41,31 +51,33 @@
   .seg{display:flex;gap:8px}
   .seg label{flex:1;margin:0;position:relative;cursor:pointer}
   .seg input{position:absolute;opacity:0}
-  .seg span{display:block;text-align:center;padding:11px 8px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14.5px;transition:.15s}
+  .seg span{display:block;text-align:center;padding:11px 8px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:14.5px;transition:.15s;color:var(--ink)}
   .seg input:checked+span{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
   .reveal{display:none;border-top:1px dashed var(--line);margin-top:6px;padding-top:16px}
   .reveal.show{display:block}
-  .btn{width:100%;padding:14px;border:0;border-radius:12px;background:var(--accent);color:var(--accent-ink);font-size:16px;font-weight:500;font-family:inherit;cursor:pointer;margin-top:6px}
+  .btn{width:100%;padding:14px;border:0;border-radius:12px;background:var(--accent);color:var(--accent-ink);font-size:16px;font-weight:500;font-family:inherit;cursor:pointer;margin-top:6px;transition:background .15s}
+  .btn:hover{background:var(--accent-hover)}
   .btn:disabled{opacity:.6}
   .msg{font-size:13px;color:var(--err);margin:10px 0 0;min-height:1px}
   .done{text-align:center;padding:34px 10px}
-  .done h2{font-family:Fraunces,serif;font-weight:500;font-size:26px;margin:0 0 10px}
+  .done h2{font-family:Fraunces,serif;font-weight:500;font-size:26px;margin:0 0 10px;color:var(--ink)}
   .done p{color:var(--muted);margin:0}
-  .details{margin-top:16px}
-  .dtitle{font-family:Fraunces,serif;font-weight:500;font-size:19px;margin:0 0 14px}
-  .venue{border-top:1px solid var(--line);padding-top:14px;margin-top:14px}
-  .venue:first-of-type{border-top:0;padding-top:0;margin-top:0}
+  .hp-field{position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;opacity:0}
+
+  .details{}
+  .dtitle{font-family:Fraunces,serif;font-weight:500;font-size:19px;margin:0 0 14px;color:var(--ink)}
+  .venue{padding-top:0}
   .vlabel{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 3px}
   .vname{font-weight:500;font-size:15px;margin:0}
   .vaddr{font-size:13.5px;color:var(--muted);margin:2px 0 8px}
   .dtime{font-size:13.5px;color:var(--ink);margin:0 0 10px}
   .maps{display:flex;gap:8px;flex-wrap:wrap}
-  .maps a{flex:1;min-width:92px;text-align:center;padding:9px 6px;border:1px solid var(--line);border-radius:9px;font-size:13px;color:var(--accent);text-decoration:none}
-  .cal{display:block;text-align:center;margin-top:14px;padding:12px;border:1px solid var(--accent);border-radius:10px;color:var(--accent);text-decoration:none;font-size:14px;font-weight:500}
+  .maps a{flex:1;min-width:92px;text-align:center;padding:9px 6px;border:1px solid var(--line);border-radius:9px;font-size:13px;color:var(--accent);text-decoration:none;background:#fff}
+  .cal{display:block;text-align:center;margin-top:14px;padding:12px;border:1px solid var(--accent);border-radius:10px;color:var(--accent);text-decoration:none;font-size:14px;font-weight:500;background:#fff}
+
   footer{text-align:center;margin:20px 0 0}
   footer a{color:rgba(255,255,255,.82);text-decoration:none;font-size:12px;display:block;line-height:1.8}
   .tag{letter-spacing:.16em;text-transform:uppercase;font-size:10.5px;opacity:.9}
-  .hp-field{position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;opacity:0}
 </style>
 </head>
 <body>
@@ -99,6 +111,11 @@
     </div>
 
     <p class="note-hero">A child free celebration &middot; No children will be admitted</p>
+  </div>
+
+  <div class="card bio">
+    <p class="pull">Sixty years. Countless stories. One remarkable life.</p>
+    <p class="body">Brett Stapleton is turning 60, and the people who love him are gathering to make sure it's a night to remember. Come dressed to celebrate, ready to laugh, and prepared to share in a milestone that means far more than the number on the cake.</p>
   </div>
 
   <div class="card" id="card">
