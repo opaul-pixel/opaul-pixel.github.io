@@ -24,25 +24,28 @@
   .stage{width:100%;max-width:460px}
 
   /* Splash */
-  .splash{position:fixed;inset:0;z-index:100;background:#12283b;
+    .splash{position:fixed;inset:0;z-index:100;background:#12283b;
     background-image:linear-gradient(rgba(18,40,59,.84),rgba(18,40,59,.94)),var(--hero-photo);
     background-size:cover;background-position:center;
-    display:flex;flex-direction:column;align-items:center;justify-content:center;
-    color:#fff;text-align:center;padding:20px;cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;justify-content:space-between;
+    color:#fff;text-align:center;padding:64px 24px 48px;cursor:pointer;
     transition:opacity .6s ease}
   .splash.hide{opacity:0;pointer-events:none}
-  .splash-inner{max-width:340px}
-  .splash-orn{font-family:Fraunces,serif;font-style:italic;font-size:14px;letter-spacing:.24em;text-transform:uppercase;opacity:.7;margin:0 0 22px}
-  .splash h2{font-family:Fraunces,serif;font-weight:500;font-size:34px;line-height:1.1;margin:0 0 14px;letter-spacing:-.005em}
-  .splash p{font-family:Fraunces,serif;font-style:italic;font-size:16px;opacity:.9;margin:0 0 30px}
+  .splash-top{width:100%;max-width:340px;padding-top:8vh}
+  .splash-mid{width:100%;max-width:340px;display:flex;flex-direction:column;align-items:center;gap:28px}
+  .splash-bot{width:100%;max-width:340px;padding-bottom:4vh}
+  .splash-orn{font-family:Fraunces,serif;font-style:italic;font-size:14px;letter-spacing:.24em;text-transform:uppercase;opacity:.7;margin:0}
+  .splash h2{font-family:Fraunces,serif;font-weight:500;font-size:36px;line-height:1.05;margin:0;letter-spacing:-.005em}
+  .splash-sub{font-family:Fraunces,serif;font-style:italic;font-size:17px;opacity:.9;margin:0}
   .splash-seal{display:inline-flex;align-items:center;justify-content:center;
-    width:110px;height:110px;border-radius:50%;
+    width:120px;height:120px;border-radius:50%;
     border:2px solid rgba(255,255,255,.75);
     font-family:Fraunces,serif;font-weight:500;font-size:15px;letter-spacing:.14em;text-transform:uppercase;
     color:#fff;background:rgba(255,255,255,.05);
-    animation:pulse 2.4s ease-in-out infinite}
+    animation:pulse 2.4s ease-in-out infinite;margin-top:8px}
   @keyframes pulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(255,255,255,.25)}50%{transform:scale(1.04);box-shadow:0 0 0 14px rgba(255,255,255,0)}}
-    .splash-hint{font-family:Inter,sans-serif;font-style:normal;font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.55;margin:18px 0 0}
+  .splash-hint{font-family:Inter,sans-serif;font-style:normal;font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.55;margin:0}
+
 
 
   /* Audio toggle */
@@ -127,14 +130,19 @@
 <body>
 
 <div class="splash" id="splash">
-  <div class="splash-inner">
+  <div class="splash-top">
     <p class="splash-orn">You are invited</p>
+  </div>
+  <div class="splash-mid">
     <h2>Brett Stapleton</h2>
-    <p>60th Birthday Celebration</p>
+    <p class="splash-sub">60th Birthday Celebration</p>
     <div class="splash-seal">Open</div>
+  </div>
+  <div class="splash-bot">
     <p class="splash-hint">Tap anywhere to open your invitation</p>
   </div>
 </div>
+
 
 <button class="audio-btn" id="audioBtn" aria-label="Toggle music">
   <svg viewBox="0 0 24 24" id="audioIcon"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
