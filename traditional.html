@@ -56,6 +56,10 @@
   .done{text-align:center;padding:34px 10px}
   .done h2{font-family:Fraunces,serif;font-weight:500;font-size:26px;margin:0 0 10px}
   .done p{color:var(--muted);margin:0}
+  .duplicate-msg{
+  color:var(--err) !important;
+  font-weight:500;
+}
   .details{margin-top:16px}
   .dtitle{font-family:Fraunces,serif;font-weight:500;font-size:19px;margin:0 0 14px}
   .venue{border-top:1px solid var(--line);padding-top:14px;margin-top:14px}
@@ -343,23 +347,118 @@
   }
 
   function offerUpdate(res){
-    var c=$('card');
-    var existingName = res.name || (lastFormData.first+' '+lastFormData.last);
-    c.innerHTML=
-      '<div class="done">'+
-        '<h2>You\'ve already RSVPed.</h2>'+
-        '<p>An RSVP is already on file under this name or phone number. Would you like to update your submission?</p>'+
-        '<div class="update-btns">'+
-          '<button class="btn" id="btnYes">Yes, update my RSVP</button>'+
-          '<button class="btn btn-ghost" id="btnNo">No, keep the original</button>'+
-        '</div>'+
-      '</div>';
-    $('btnYes').addEventListener('click', function(){ submit(res.partyId); });
-    $('btnNo').addEventListener('click', function(){
-      var cc=$('card');
-      cc.innerHTML='<div class="done"><h2>Thanks for checking in.</h2><p>Your original RSVP stands. We can\'t wait to see you.</p></div>';
+  var c = $('card');
+  var partyId = res.partyId || res.party_id;
+
+  var savedData = lastFormData;
+
+  c.innerHTML =
+    '<div class="done">'+
+      '<h2>You\'ve already RSVPed.</h2>'+
+      '<p>An RSVP is already on file under this name or phone number. Would you like to update your submission?</p>'+
+      '<div class="update-btns">'+
+        '<button class="btn" id="btnYes">Yes, update my RSVP</button>'+
+        '<button class="btn btn-ghost" id="btnNo">No, keep the original</button>'+
+      '</div>'+
+    '</div>';
+
+  setTimeout(function(){
+    c.scrollIntoView({
+      behavior:'smooth',
+      block:'center'
     });
-  }
+  },100);
+
+  $('btnYes').addEventListener('click', function(){
+
+    this.disabled = true;
+    this.textContent = 'Sending…';
+
+    if(!savedData){
+      c.querySelector('.done p').textContent =
+        'Unable to update. Please refresh and submit again.';
+      return;
+    }
+
+    submitUpdate(partyId, savedData);
+
+  });
+
+
+  $('btnNo').addEventListener('click', function(){
+
+    c.innerHTML =
+      '<div class="done">'+
+      '<h2>Thanks for checking in.</h2>'+
+      '<p>Your original RSVP stands. We can\'t wait to see you.</p>'+
+      '</div>';
+
+    c.scrollIntoView({
+      behavior:'smooth',
+      block:'center'
+    });
+
+  });
+}
+
+  function submitUpdate(partyId, data){
+
+  var cb='update_'+Date.now();
+
+  var params={
+    action:'rsvp',
+    callback:cb,
+    client:CLIENT,
+
+    first:data.first,
+    last:data.last,
+    phone:data.phone,
+
+    attending:data.att,
+    plusone:data.plus?'yes':'no',
+
+    p1first:data.p1first,
+    p1last:data.p1last,
+    p1phone:data.p1phone,
+
+    special:data.special,
+    overwrite_party:partyId,
+    hp:''
+  };
+
+
+  window[cb]=function(res){
+
+    delete window[cb];
+
+    if(res.status==='ok_updated'){
+      doneUpdated(data.first+' '+data.last);
+      return;
+    }
+
+    fail(res.message || 'Update failed');
+
+  };
+
+
+  var qs=Object.keys(params)
+    .map(function(k){
+      return encodeURIComponent(k)+'='+encodeURIComponent(params[k]);
+    })
+    .join('&');
+
+
+  var s=document.createElement('script');
+
+  s.src=ENDPOINT+'?'+qs;
+
+  s.onerror=function(){
+    fail('Could not reach server');
+  };
+
+  document.body.appendChild(s);
+
+}
 
 send.addEventListener('click', function(){ submit(); });
 </script>
