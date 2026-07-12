@@ -115,6 +115,10 @@
   .reveal{display:none;border-top:1px dashed var(--line);margin-top:6px;padding-top:16px}
   .reveal.show{display:block}
   .btn{width:100%;padding:14px;border:0;border-radius:12px;background:var(--accent);color:var(--accent-ink);font-size:16px;font-weight:500;font-family:inherit;cursor:pointer;margin-top:6px;transition:background .15s}
+  .update-btns{display:flex;flex-direction:column;gap:10px;margin-top:18px}
+  .update-btns .btn{margin-top:0}
+  .btn-ghost{background:transparent;color:var(--accent);border:1px solid var(--line)}
+  .btn-ghost:hover{background:rgba(0,0,0,.04)}
   .btn:hover{background:var(--accent-hover)}
   .btn:disabled{opacity:.6}
   .msg{font-size:13px;color:var(--err);margin:10px 0 0;min-height:1px}
@@ -423,37 +427,54 @@
     }
   }
 
-  function submit(){
+ var lastFormData = null;
+
+  function submit(overwritePartyId){
     msg.textContent='';
-    var first=$('first').value.trim(), last=$('last').value.trim();
-    var phone=digits($('phone').value), att=attVal();
+    var data;
 
-    if(!first){ return fail('Please enter your first name.'); }
-    if(!NAME_RE.test(first)){ return fail('First name should be letters only.'); }
-    if(!last){ return fail('Please enter your last name.'); }
-    if(!NAME_RE.test(last)){ return fail('Last name should be letters only.'); }
-    if(!PHONE_RE.test(phone)){ return fail('Enter a mobile starting with 04, 10 digits total.'); }
-    if(!att){ return fail('Please let us know if you can attend.'); }
+    if(overwritePartyId){
+      if(!lastFormData) return;
+      data = lastFormData;
+    } else {
+      var first=$('first').value.trim(), last=$('last').value.trim();
+      var phone=digits($('phone').value), att=attVal();
 
-    var plus = att==='yes' && poVal()==='yes';
-    var p1first = plus ? $('p1first').value.trim() : '';
-    var p1last  = plus ? $('p1last').value.trim()  : '';
-    var p1phone = plus ? digits($('p1phone').value) : '';
-    if(plus){
-      if(!p1first || !NAME_RE.test(p1first)){ return fail("Enter your plus one's first name (letters only)."); }
-      if(!p1last  || !NAME_RE.test(p1last)){  return fail("Enter your plus one's last name (letters only)."); }
-      if(!PHONE_RE.test(p1phone)){ return fail("Enter your plus one's mobile, starting with 04, 10 digits total."); }
+      if(!first){ return fail('Please enter your first name.'); }
+      if(!NAME_RE.test(first)){ return fail('First name should be letters only.'); }
+      if(!last){ return fail('Please enter your last name.'); }
+      if(!NAME_RE.test(last)){ return fail('Last name should be letters only.'); }
+      if(!PHONE_RE.test(phone)){ return fail('Enter a mobile starting with 04, 10 digits total.'); }
+      if(!att){ return fail('Please let us know if you can attend.'); }
+
+      var plus = att==='yes' && poVal()==='yes';
+      var p1first = plus ? $('p1first').value.trim() : '';
+      var p1last  = plus ? $('p1last').value.trim()  : '';
+      var p1phone = plus ? digits($('p1phone').value) : '';
+      if(plus){
+        if(!p1first || !NAME_RE.test(p1first)){ return fail("Enter your plus one's first name (letters only)."); }
+        if(!p1last  || !NAME_RE.test(p1last)){  return fail("Enter your plus one's last name (letters only)."); }
+        if(!PHONE_RE.test(p1phone)){ return fail("Enter your plus one's mobile, starting with 04, 10 digits total."); }
+        if(phone === p1phone){ return fail("Your plus one's phone must be different from yours."); }
+      }
+
+      var wantsSR = att==='yes' && srVal()==='yes';
+      var special = wantsSR ? $('special').value.trim() : '';
+      if(wantsSR && !special){ return fail('Please add your request, or select No for special requests.'); }
+
+      data = { first:first, last:last, phone:phone, att:att, plus:plus,
+               p1first:p1first, p1last:p1last, p1phone:p1phone, special:special };
+      lastFormData = data;
     }
-
-    var wantsSR = att==='yes' && srVal()==='yes';
-    var special = wantsSR ? $('special').value.trim() : '';
-    if(wantsSR && !special){ return fail('Please add your request, or select No for special requests.'); }
 
     send.disabled=true; send.textContent='Sending\u2026';
     var s, cb='rsvp_'+Date.now();
-    var params={action:'rsvp',callback:cb,client:CLIENT,first:first,last:last,phone:phone,
-      attending:att,plusone:poVal()||'no',p1first:p1first,p1last:p1last,p1phone:p1phone,special:special,
-      hp:$('hp').value};
+    var params={ action:'rsvp', callback:cb, client:CLIENT,
+      first:data.first, last:data.last, phone:data.phone,
+      attending:data.att, plusone:data.plus?'yes':'no',
+      p1first:data.p1first, p1last:data.p1last, p1phone:data.p1phone,
+      special:data.special, hp:$('hp').value };
+    if(overwritePartyId) params.overwrite_party = overwritePartyId;
 
     var t=setTimeout(function(){ cleanup(); fail('Could not reach the server. Check your connection and try again.'); },15000);
     function cleanup(){ send.disabled=false; send.textContent='Send RSVP';
@@ -461,8 +482,12 @@
       if(s&&s.parentNode) s.parentNode.removeChild(s); }
 
     window[cb]=function(res){ clearTimeout(t); cleanup();
-      if(res && res.status==='ok'){ done(first+' '+last, att); }
-      else { fail((res&&res.message)?res.message:'Something went wrong. Please try again.'); }
+      if(!res) return fail('Something went wrong. Please try again.');
+      if(res.status==='ok') return doneOk(data.first+' '+data.last, data.att);
+      if(res.status==='ok_updated') return doneUpdated(data.first+' '+data.last);
+      if(res.status==='plus_one_conflict') return blocked(res.message);
+      if(res.status==='duplicate') return offerUpdate(res);
+      return fail(res.message || 'Something went wrong. Please try again.');
     };
 
     var qs=Object.keys(params).map(function(k){return encodeURIComponent(k)+'='+encodeURIComponent(params[k]);}).join('&');
@@ -471,7 +496,39 @@
     s.onerror=function(){ clearTimeout(t); cleanup(); fail('Could not reach the server. Please try again.'); };
     document.body.appendChild(s);
   }
-  send.addEventListener('click', submit);
+
+  var lastFormData = null;
+
+  function doneUpdated(name){
+    var c=$('card');
+    c.innerHTML='<div class="done"><h2>RSVP updated, '+esc(name)+'.</h2><p>Your changes have been saved. See you on the day.</p></div>';
+  }
+
+  function blocked(message){
+    var c=$('card');
+    c.innerHTML='<div class="done"><h2>Already on the list</h2><p>'+esc(message)+'</p></div>';
+  }
+
+  function offerUpdate(res){
+    var c=$('card');
+    var existingName = res.name || (lastFormData.first+' '+lastFormData.last);
+    c.innerHTML=
+      '<div class="done">'+
+        '<h2>You\'ve already RSVPed.</h2>'+
+        '<p>An RSVP is already on file under this name or phone number. Would you like to update your submission?</p>'+
+        '<div class="update-btns">'+
+          '<button class="btn" id="btnYes">Yes, update my RSVP</button>'+
+          '<button class="btn btn-ghost" id="btnNo">No, keep the original</button>'+
+        '</div>'+
+      '</div>';
+    $('btnYes').addEventListener('click', function(){ submit(res.partyId); });
+    $('btnNo').addEventListener('click', function(){
+      var cc=$('card');
+      cc.innerHTML='<div class="done"><h2>Thanks for checking in.</h2><p>Your original RSVP stands. We can\'t wait to see you.</p></div>';
+    });
+  }
+
+send.addEventListener('click', function(){ submit(); });
 </script>
 </body>
 </html>
