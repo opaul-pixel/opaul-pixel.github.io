@@ -56,6 +56,10 @@
   .done{text-align:center;padding:34px 10px}
   .done h2{font-family:Fraunces,serif;font-weight:500;font-size:26px;margin:0 0 10px}
   .done p{color:var(--muted);margin:0}
+  .duplicate-msg{
+  color:var(--err) !important;
+  font-weight:500;
+}
   .details{margin-top:16px}
   .dtitle{font-family:Fraunces,serif;font-weight:500;font-size:19px;margin:0 0 14px}
   .venue{border-top:1px solid var(--line);padding-top:14px;margin-top:14px}
@@ -372,8 +376,8 @@ function offerUpdate(res){
 
   c.innerHTML =
     '<div class="done">'+
-      '<h2>You\'ve already RSVPed.</h2>'+
-      '<p>An RSVP is already on file under this name or phone number. Would you like to update your submission?</p>'+
+      '<h2 class="duplicate-msg">You\'ve already RSVPed.</h2>'+
+      '<p class="duplicate-msg">An RSVP is already on file under this name or phone number. Would you like to update your submission?</p>'+
       '<div class="update-btns">'+
         '<button class="btn" id="btnYes">Yes, update my RSVP</button>'+
         '<button class="btn btn-ghost" id="btnNo">No, keep the original</button>'+
