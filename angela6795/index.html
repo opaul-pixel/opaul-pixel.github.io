@@ -483,7 +483,7 @@
 
     window[cb]=function(res){ clearTimeout(t); cleanup();
       if(!res) return fail('Something went wrong. Please try again.');
-      if(res.status==='ok') return doneOk(data.first+' '+data.last, data.att);
+      if(res.status==='ok') return done(data.first+' '+data.last, data.att);
       if(res.status==='ok_updated') return doneUpdated(data.first+' '+data.last);
       if(res.status==='plus_one_conflict') return blocked(res.message);
       if(res.status==='duplicate') return offerUpdate(res);
@@ -497,8 +497,6 @@
     document.body.appendChild(s);
   }
 
-  var lastFormData = null;
-
   function doneUpdated(name){
     var c=$('card');
     c.innerHTML='<div class="done"><h2>RSVP updated, '+esc(name)+'.</h2><p>Your changes have been saved. See you on the day.</p></div>';
@@ -511,7 +509,6 @@
 
   function offerUpdate(res){
     var c=$('card');
-    var existingName = res.name || (lastFormData.first+' '+lastFormData.last);
     c.innerHTML=
       '<div class="done">'+
         '<h2>You\'ve already RSVPed.</h2>'+
