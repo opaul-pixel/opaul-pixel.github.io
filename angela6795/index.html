@@ -447,13 +447,12 @@ refreshButtons();
     msg.textContent='';
     var data;
 
-    if(overwritePartyId){
-  if(!lastFormData){
-    return fail('Your RSVP details were lost. Please submit again.');
-  }
-  data = lastFormData;
-}
-    } else {
+  if(overwritePartyId){
+    if(!lastFormData){
+      return fail('Your RSVP details were lost. Please submit again.');
+    }
+    data = lastFormData;
+  } else {
       var first=$('first').value.trim(), last=$('last').value.trim();
       var phone=digits($('phone').value), att=attVal();
 
