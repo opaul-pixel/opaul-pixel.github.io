@@ -322,7 +322,11 @@
     if(overwritePartyId) params.overwrite_party = overwritePartyId;
 
     var t=setTimeout(function(){ cleanup(); fail('Could not reach the server. Check your connection and try again.'); },15000);
-    function cleanup(){ send.disabled=false; send.textContent='Send RSVP';
+    function cleanup(){
+  if(send){
+    send.disabled=false;
+    send.textContent='Send RSVP';
+  }
       try{ delete window[cb]; }catch(e){ window[cb]=undefined; }
       if(s&&s.parentNode) s.parentNode.removeChild(s); }
 
@@ -362,7 +366,7 @@
   }
 
   function offerUpdate(res){
-  var c=$('card');
+  var c = $('card');
   var partyId = res.partyId || res.party_id;
 
   c.innerHTML =
@@ -375,21 +379,32 @@
       '</div>'+
     '</div>';
 
+  // Move user to the message
+  c.scrollIntoView({
+    behavior:'smooth',
+    block:'center'
+  });
+
   $('btnYes').addEventListener('click', function(){
 
-    // restore button reference because original send button was removed
-    send = $('btnYes');
+    this.disabled = true;
+    this.textContent = 'Sending\u2026';
 
     submit(partyId);
 
   });
 
   $('btnNo').addEventListener('click', function(){
-    $('card').innerHTML =
+    c.innerHTML =
       '<div class="done">'+
       '<h2>Thanks for checking in.</h2>'+
       '<p>Your original RSVP stands. We can\'t wait to see you.</p>'+
       '</div>';
+
+    c.scrollIntoView({
+      behavior:'smooth',
+      block:'center'
+    });
   });
 }
 
