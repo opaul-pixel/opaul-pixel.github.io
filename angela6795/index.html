@@ -400,7 +400,14 @@
 
   /* Form logic */
   var $ = function(id){ return document.getElementById(id); };
-  var msg = $('msg'), send = $('send');
+  var msg, send;
+
+function refreshButtons(){
+  msg = $('msg');
+  send = $('send');
+}
+
+refreshButtons();
   var NAME_RE = /^[A-Za-z][A-Za-z '\-]*$/;
   var PHONE_RE = /^04\d{8}$/;
 
@@ -530,6 +537,8 @@
         '<button class="btn btn-ghost" id="btnNo">No, keep the original</button>'+
       '</div>'+
     '</div>';
+
+    refreshButtons();
     
     setTimeout(function(){
   window.scrollTo({
