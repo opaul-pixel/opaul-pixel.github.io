@@ -264,7 +264,6 @@
   function esc(s){ return String(s).replace(/[&<>"']/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];}); }
 
   var lastFormData = null;
-var lastFormData = null;
 
   function submit(overwritePartyId){
     msg.textContent='';
@@ -365,7 +364,11 @@ var lastFormData = null;
           '<button class="btn btn-ghost" id="btnNo">No, keep the original</button>'+
         '</div>'+
       '</div>';
-    $('btnYes').addEventListener('click', function(){ submit(res.partyId); });
+    var partyId = res.partyId || res.party_id;
+
+$('btnYes').addEventListener('click', function () {
+    submit(partyId);
+});
     $('btnNo').addEventListener('click', function(){
       var cc=$('card');
       cc.innerHTML='<div class="done"><h2>Thanks for checking in.</h2><p>Your original RSVP stands. We can\'t wait to see you.</p></div>';
