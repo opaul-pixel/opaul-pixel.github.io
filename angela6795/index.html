@@ -124,7 +124,7 @@
   .msg{font-size:13px;color:var(--err);margin:10px 0 0;min-height:1px}
   .done{text-align:center;padding:24px 10px}
   .duplicate-msg{
-  color:var(--err);
+  color:var(--err) !important;
   font-size:15px;
   font-weight:500;
   line-height:1.5;
@@ -441,8 +441,11 @@
     var data;
 
     if(overwritePartyId){
-      if(!lastFormData) return;
-      data = lastFormData;
+  if(!lastFormData){
+    return fail('Your RSVP details were lost. Please submit again.');
+  }
+  data = lastFormData;
+}
     } else {
       var first=$('first').value.trim(), last=$('last').value.trim();
       var phone=digits($('phone').value), att=attVal();
@@ -527,11 +530,13 @@
         '<button class="btn btn-ghost" id="btnNo">No, keep the original</button>'+
       '</div>'+
     '</div>';
-
+    
+    setTimeout(function(){
   window.scrollTo({
     top: c.offsetTop - 20,
-    behavior: 'smooth'
+    behavior:'smooth'
   });
+},100);
 
   $('btnYes').addEventListener('click', function(){ submit(res.partyId); });
   $('btnNo').addEventListener('click', function(){
