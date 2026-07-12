@@ -260,7 +260,13 @@
   $('sr').addEventListener('change', function(){ $('srBox').classList.toggle('show', srVal()==='yes'); });
 
   function digits(v){ return String(v||'').replace(/[^\d]/g,''); }
-  function fail(t){ msg.textContent=t; send.disabled=false; send.textContent='Send RSVP'; }
+  function fail(t){
+  if(msg) msg.textContent=t;
+  if(send){
+    send.disabled=false;
+    send.textContent='Send RSVP';
+  }
+}
   function esc(s){ return String(s).replace(/[&<>"']/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];}); }
 
   var lastFormData = null;
@@ -303,7 +309,10 @@
       lastFormData = data;
     }
 
-    send.disabled=true; send.textContent='Sending\u2026';
+    if(send){
+  send.disabled=true;
+  send.textContent='Sending\u2026';
+}
     var s, cb='rsvp_'+Date.now();
     var params={ action:'rsvp', callback:cb, client:CLIENT,
       first:data.first, last:data.last, phone:data.phone,
@@ -353,27 +362,36 @@
   }
 
   function offerUpdate(res){
-    var c=$('card');
-    var existingName = res.name || (lastFormData.first+' '+lastFormData.last);
-    c.innerHTML=
-      '<div class="done">'+
-        '<h2>You\'ve already RSVPed.</h2>'+
-        '<p>An RSVP is already on file under this name or phone number. Would you like to update your submission?</p>'+
-        '<div class="update-btns">'+
-          '<button class="btn" id="btnYes">Yes, update my RSVP</button>'+
-          '<button class="btn btn-ghost" id="btnNo">No, keep the original</button>'+
-        '</div>'+
-      '</div>';
-    var partyId = res.partyId || res.party_id;
+  var c=$('card');
+  var partyId = res.partyId || res.party_id;
 
-$('btnYes').addEventListener('click', function () {
+  c.innerHTML =
+    '<div class="done">'+
+      '<h2>You\'ve already RSVPed.</h2>'+
+      '<p>An RSVP is already on file under this name or phone number. Would you like to update your submission?</p>'+
+      '<div class="update-btns">'+
+        '<button class="btn" id="btnYes">Yes, update my RSVP</button>'+
+        '<button class="btn btn-ghost" id="btnNo">No, keep the original</button>'+
+      '</div>'+
+    '</div>';
+
+  $('btnYes').addEventListener('click', function(){
+
+    // restore button reference because original send button was removed
+    send = $('btnYes');
+
     submit(partyId);
-});
-    $('btnNo').addEventListener('click', function(){
-      var cc=$('card');
-      cc.innerHTML='<div class="done"><h2>Thanks for checking in.</h2><p>Your original RSVP stands. We can\'t wait to see you.</p></div>';
-    });
-  }
+
+  });
+
+  $('btnNo').addEventListener('click', function(){
+    $('card').innerHTML =
+      '<div class="done">'+
+      '<h2>Thanks for checking in.</h2>'+
+      '<p>Your original RSVP stands. We can\'t wait to see you.</p>'+
+      '</div>';
+  });
+}
 
   send.addEventListener('click', function(){ submit(); });
 </script>
