@@ -122,7 +122,14 @@
   .btn:hover{background:var(--accent-hover)}
   .btn:disabled{opacity:.6}
   .msg{font-size:13px;color:var(--err);margin:10px 0 0;min-height:1px}
-  .done{text-align:center;padding:34px 10px}
+  .done{text-align:center;padding:24px 10px}
+  .duplicate-msg{
+  color:var(--err);
+  font-size:15px;
+  font-weight:500;
+  line-height:1.5;
+  margin-top:12px;
+}
   .done h2{font-family:Fraunces,serif;font-weight:500;font-size:26px;margin:0 0 10px;color:var(--ink)}
   .done p{color:var(--muted);margin:0}
   .hp-field{position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;opacity:0}
@@ -508,22 +515,30 @@
   }
 
   function offerUpdate(res){
-    var c=$('card');
-    c.innerHTML=
-      '<div class="done">'+
-        '<h2>You\'ve already RSVPed.</h2>'+
-        '<p>An RSVP is already on file under this name or phone number. Would you like to update your submission?</p>'+
-        '<div class="update-btns">'+
-          '<button class="btn" id="btnYes">Yes, update my RSVP</button>'+
-          '<button class="btn btn-ghost" id="btnNo">No, keep the original</button>'+
-        '</div>'+
-      '</div>';
-    $('btnYes').addEventListener('click', function(){ submit(res.partyId); });
-    $('btnNo').addEventListener('click', function(){
-      var cc=$('card');
-      cc.innerHTML='<div class="done"><h2>Thanks for checking in.</h2><p>Your original RSVP stands. We can\'t wait to see you.</p></div>';
-    });
-  }
+  var c=$('card');
+  var existingName = res.name || (lastFormData.first+' '+lastFormData.last);
+
+  c.innerHTML=
+    '<div class="done">'+
+      '<h2 class="duplicate-msg">You\'ve already RSVPed.</h2>'+
+      '<p class="duplicate-msg">An RSVP is already on file under this name or phone number. Would you like to update your submission?</p>'+
+      '<div class="update-btns">'+
+        '<button class="btn" id="btnYes">Yes, update my RSVP</button>'+
+        '<button class="btn btn-ghost" id="btnNo">No, keep the original</button>'+
+      '</div>'+
+    '</div>';
+
+  window.scrollTo({
+    top: c.offsetTop - 20,
+    behavior: 'smooth'
+  });
+
+  $('btnYes').addEventListener('click', function(){ submit(res.partyId); });
+  $('btnNo').addEventListener('click', function(){
+    var cc=$('card');
+    cc.innerHTML='<div class="done"><h2>Thanks for checking in.</h2><p>Your original RSVP stands. We can\'t wait to see you.</p></div>';
+  });
+}
 
 send.addEventListener('click', function(){ submit(); });
 </script>
