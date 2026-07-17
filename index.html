@@ -119,7 +119,7 @@
     .ticker-track {
       display: flex;
       width: max-content;
-      animation: ticker 22s linear infinite;
+      animation: ticker 24s linear infinite;
     }
 
     .ticker-track:hover { animation-play-state: paused; }
@@ -239,7 +239,7 @@
       min-height: 110px;
     }
 
-    /* ── PILL OPTIONS (Tally style) ── */
+    /* ── PILL OPTIONS ── */
     .option-group {
       display: flex;
       flex-wrap: wrap;
@@ -278,19 +278,16 @@
       display: none;
     }
 
-    /* ── CONDITIONAL ── */
-    #event-type-field {
+    /* ── CONDITIONALS ── */
+    #event-type-field,
+    #home-install-field {
       display: none;
     }
-    #event-type-field.visible {
+    #event-type-field.visible,
+    #home-install-field.visible {
       display: block;
     }
 
-    /* ── DATE TOGGLE ── */
-    .date-toggle {
-      display: flex;
-      gap: 10px;
-    }
     input[type="date"] {
       width: 100%;
       background: var(--cream);
@@ -396,7 +393,7 @@
       .ticker-track { animation: none; }
     }
 
-    /* ── HONEYPOT (spam trap; hidden from all real users) ── */
+    /* ── HONEYPOT ── */
     .hp {
       position: absolute !important;
       left: -9999px !important;
@@ -423,14 +420,15 @@
   <section class="hero">
     <p class="hero-eyebrow">AV, IT & Event Production · Australia</p>
     <h1 class="hero-headline">Your project,<br><em>technically</em><br>perfect.</h1>
-    <p class="hero-body">Echo Labs handles the technical side of your event, sound, lighting, staging, AV installations, live operations, and consulting. We also design invitations and build digital RSVP and seating systems, so it's all handled in one place.</p>
+    <p class="hero-body">Echo Labs handles the technical side of your project. For events: sound, lighting, staging, live operations, and consulting. For venues and homes: AV design, installation, and calibration. We also design invitations and build digital RSVP and seating systems, so it's all handled in one place.</p>
   </section>
 
   <!-- TICKER -->
   <div class="ticker-wrap">
     <div class="ticker-track">
       <div class="ticker-item"><span class="ticker-dot"></span>Event Production</div>
-      <div class="ticker-item"><span class="ticker-dot"></span>AV Installations</div>
+      <div class="ticker-item"><span class="ticker-dot"></span>Home Installations</div>
+      <div class="ticker-item"><span class="ticker-dot"></span>Venue AV Installations</div>
       <div class="ticker-item"><span class="ticker-dot"></span>Technical Consulting</div>
       <div class="ticker-item"><span class="ticker-dot"></span>Live Operations</div>
       <div class="ticker-item"><span class="ticker-dot"></span>Staging & Lighting</div>
@@ -438,7 +436,8 @@
       <div class="ticker-item"><span class="ticker-dot"></span>Invitation Design</div>
       <div class="ticker-item"><span class="ticker-dot"></span>Digital RSVP & Seating</div>
       <div class="ticker-item"><span class="ticker-dot"></span>Event Production</div>
-      <div class="ticker-item"><span class="ticker-dot"></span>AV Installations</div>
+      <div class="ticker-item"><span class="ticker-dot"></span>Home Installations</div>
+      <div class="ticker-item"><span class="ticker-dot"></span>Venue AV Installations</div>
       <div class="ticker-item"><span class="ticker-dot"></span>Technical Consulting</div>
       <div class="ticker-item"><span class="ticker-dot"></span>Live Operations</div>
       <div class="ticker-item"><span class="ticker-dot"></span>Staging & Lighting</div>
@@ -483,7 +482,8 @@
         <label>What kind of project is this? <span class="req">*</span></label>
         <div class="option-group" id="project-type-group">
           <label class="option-label"><input type="radio" name="project_type" value="Event Production" required>Event Production</label>
-          <label class="option-label"><input type="radio" name="project_type" value="Tech Installation">Tech Installation</label>
+          <label class="option-label"><input type="radio" name="project_type" value="Home Installation">Home Installation</label>
+          <label class="option-label"><input type="radio" name="project_type" value="Venue Installation">Venue Installation</label>
           <label class="option-label"><input type="radio" name="project_type" value="Tech Operator">Tech Operator</label>
           <label class="option-label"><input type="radio" name="project_type" value="Consulting / Advisory">Consulting / Advisory</label>
           <label class="option-label"><input type="radio" name="project_type" value="Invitation Design">Invitation Design</label>
@@ -505,15 +505,29 @@
         </div>
       </div>
 
+      <div class="field" id="home-install-field">
+        <label>What kind of home install?</label>
+        <p class="hint">Tick everything that applies</p>
+        <div class="option-group">
+          <label class="option-label"><input type="checkbox" name="install_type" value="Home theatre">Home theatre</label>
+          <label class="option-label"><input type="checkbox" name="install_type" value="Multi-room audio">Multi-room audio</label>
+          <label class="option-label"><input type="checkbox" name="install_type" value="Smart home / automation">Smart home / automation</label>
+          <label class="option-label"><input type="checkbox" name="install_type" value="Networking / Wi-Fi">Networking / Wi-Fi</label>
+          <label class="option-label"><input type="checkbox" name="install_type" value="TV mounting / display">TV mounting / display</label>
+          <label class="option-label"><input type="checkbox" name="install_type" value="Full home AV">Full home AV</label>
+          <label class="option-label"><input type="checkbox" name="install_type" value="Not sure, help me figure it out">Not sure, help me figure it out</label>
+        </div>
+      </div>
+
       <div class="field">
-        <label>Project date or timeline <span class="req">*</span></label>
+        <label>Project date or preferred timeline <span class="req">*</span></label>
         <p class="hint">If exact date isn't set yet, give us your best estimate</p>
         <input type="date" name="event_date" id="event-date-input" />
       </div>
 
       <div class="field">
-        <label>Venue or location</label>
-        <input type="text" name="venue" placeholder="City is fine if venue isn't confirmed" />
+        <label>Venue, install address, or location</label>
+        <input type="text" name="venue" placeholder="City is fine if the address isn't confirmed" />
       </div>
 
       <div class="field">
@@ -536,7 +550,7 @@
 
       <div class="field">
         <label>Tell us about it <span class="req">*</span></label>
-        <p class="hint">Guest count, vibe, anything specific we should know. The more detail, the better the quote.</p>
+        <p class="hint">Guest count, room size, existing gear, vibe, anything specific we should know. The more detail, the better the quote.</p>
         <textarea name="details" required></textarea>
       </div>
 
@@ -571,31 +585,27 @@
 
     document.querySelectorAll('input[name="project_type"]').forEach(function(radio) {
       radio.addEventListener('change', function() {
-        var field = document.getElementById('event-type-field');
-        if (this.value === 'Event Production') {
-          field.classList.add('visible');
-        } else {
-          field.classList.remove('visible');
-          field.querySelectorAll('input[type="radio"]').forEach(function(r) {
-            r.checked = false;
-            r.closest('.option-label').classList.remove('selected');
-          });
-        }
-      });
-    });
+        var eventField = document.getElementById('event-type-field');
+        var homeField  = document.getElementById('home-install-field');
 
-    document.querySelectorAll('input[name="date_mode"]').forEach(function(radio) {
-      radio.addEventListener('change', function() {
-        var dateInput = document.getElementById('event-date-input');
-        var estInput = document.getElementById('timeline-estimate-input');
-        if (this.value === 'exact') {
-          dateInput.style.display = 'block';
-          estInput.style.display = 'none';
-          estInput.value = '';
-        } else {
-          dateInput.style.display = 'none';
-          estInput.style.display = 'block';
-          dateInput.value = '';
+        // Hide both, and clear any prior selections when switching
+        eventField.classList.remove('visible');
+        homeField.classList.remove('visible');
+
+        eventField.querySelectorAll('input[type="radio"]').forEach(function(r) {
+          r.checked = false;
+          r.closest('.option-label').classList.remove('selected');
+        });
+        homeField.querySelectorAll('input[type="checkbox"]').forEach(function(c) {
+          c.checked = false;
+          c.closest('.option-label').classList.remove('selected');
+        });
+
+        // Reveal the relevant follow-on group
+        if (this.value === 'Event Production') {
+          eventField.classList.add('visible');
+        } else if (this.value === 'Home Installation') {
+          homeField.classList.add('visible');
         }
       });
     });
@@ -608,7 +618,7 @@
       try {
         var fd = new FormData(form);
         var needs = fd.getAll('needs').join(', ');
-        var dateVal = fd.get('event_date') || fd.get('timeline_estimate') || '';
+        var installType = fd.getAll('install_type').join(', ');
         var payload = encodeURIComponent(JSON.stringify({
           kind: 'enquiry',
           name: fd.get('name') || '',
@@ -616,7 +626,8 @@
           phone: fd.get('phone') || '',
           project_type: fd.get('project_type') || '',
           event_type: fd.get('event_type') || '',
-          event_date: dateVal,
+          install_type: installType,
+          event_date: fd.get('event_date') || '',
           venue: fd.get('venue') || '',
           needs: needs,
           details: fd.get('details') || '',
@@ -634,7 +645,7 @@
       var btn = form.querySelector('button[type="submit"]');
       btn.disabled = true;
       btn.textContent = 'Sending…';
-      logEnquiryToSheet(form); // fire sheet logging alongside Formspree
+      logEnquiryToSheet(form);
       fetch(form.action, {
         method: 'POST',
         body: new FormData(form),
