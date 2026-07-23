@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Live Questions — The Transformation Edge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0F1A0F; --panel:#162616; --ink:#F4F1E8; --accent:#97BC62;
+    --muted:#7E8C74; --line:#2A3B2A;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Geist",-apple-system,system-ui,sans-serif;background:var(--bg);color:var(--ink);
+    min-height:100vh;-webkit-font-smoothing:antialiased}
+  .top{display:flex;justify-content:space-between;align-items:center;
+    padding:26px 40px;border-bottom:1px solid var(--line)}
+  .top .title{font-size:1.5rem;font-weight:600;letter-spacing:-.02em}
+  .top .title .accent{color:var(--accent)}
+  .top .meta{color:var(--muted);font-size:1rem;display:flex;align-items:center;gap:20px}
+  .live{display:flex;align-items:center;gap:9px;font-size:.9rem;letter-spacing:.1em;text-transform:uppercase}
+  .live .pulse{width:11px;height:11px;border-radius:50%;background:var(--accent);
+    animation:pulse 1.6s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+  .count{color:var(--muted);font-size:1rem}
+
+  .grid{padding:34px 40px;display:grid;grid-template-columns:repeat(auto-fill,minmax(440px,1fr));
+    gap:22px;align-content:start}
+  .q{background:var(--panel);border:1px solid var(--line);border-radius:20px;
+    padding:30px 32px;position:relative;animation:in .45s ease;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+  @keyframes in{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+  .q .qmark{font-size:2.2rem;line-height:1;color:var(--accent);font-weight:700;margin-bottom:12px}
+  .q .text{font-size:1.7rem;line-height:1.35;font-weight:500;letter-spacing:-.01em;word-break:break-word}
+  .q .num{position:absolute;top:20px;right:24px;color:var(--muted);font-size:.95rem;font-weight:600}
+  .q .hide{position:absolute;bottom:16px;right:18px;background:none;border:1px solid var(--line);
+    color:var(--muted);font-family:inherit;font-size:.78rem;padding:5px 12px;border-radius:999px;
+    cursor:pointer;opacity:0;transition:opacity .2s}
+  .q:hover .hide{opacity:1}
+  .q .hide:hover{border-color:var(--accent);color:var(--accent)}
+
+  /* bigger text when few questions */
+  .grid.sparse{grid-template-columns:1fr;max-width:1100px;margin:0 auto}
+  .grid.sparse .q .text{font-size:2.4rem}
+
+  .empty{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    color:var(--muted);text-align:center;padding:40px}
+  .empty .big{font-size:2.6rem;font-weight:500;color:var(--ink);letter-spacing:-.02em;margin-bottom:14px}
+  .empty .sub{font-size:1.3rem}
+  .empty .qr-hint{margin-top:30px;font-size:1.05rem;color:var(--muted)}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="title">Your questions <span class="accent">·</span> answered live</div>
+  <div class="meta">
+    <span class="count" id="count"></span>
+    <span class="live"><span class="pulse"></span> Live</span>
+  </div>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<div class="empty" id="empty">
+  <div class="big">Questions will appear here</div>
+  <div class="sub">Scan the QR code to send yours in.</div>
+  <div class="qr-hint">They'll show up on this screen as they arrive.</div>
+</div>
+
+<script>
+  // Same Apps Script deployment as the forms — the doGet endpoint returns questions.
+  const ENDPOINT = "https://script.google.com/macros/s/AKfycbxr60gubn9xamTwfklYJxdlyS32gRomt3BYAM-ayfTsl1v9n8k49Bm5tXzIc-HBEa79/exec";
+  const POLL_MS = 6000;
+
+  // simple profanity guard — auto-hides obviously inappropriate questions.
+  const BLOCK = ["fuck","shit","cunt","bitch","bastard","dick","asshole","nigger","faggot","slut","whore"];
+  function clean(t){ const l=t.toLowerCase(); return !BLOCK.some(w=>l.includes(w)); }
+
+  const grid = document.getElementById("grid");
+  const empty = document.getElementById("empty");
+  const countEl = document.getElementById("count");
+  const shown = new Set();           // ids already on screen
+  const hidden = new Set(JSON.parse(localStorage.getItem("hiddenQ")||"[]"));
+  let visibleCount = 0;
+
+  function saveHidden(){ localStorage.setItem("hiddenQ", JSON.stringify([...hidden])); }
+
+  function addQuestion(item){
+    if (shown.has(item.id) || hidden.has(item.id)) return;
+    if (!clean(item.q)) { hidden.add(item.id); saveHidden(); return; }
+    shown.add(item.id);
+    const card = document.createElement("div");
+    card.className = "q";
+    card.dataset.id = item.id;
+    card.innerHTML =
+      '<div class="num">#'+ (visibleCount+1) +'</div>' +
+      '<div class="qmark">&ldquo;</div>' +
+      '<div class="text"></div>' +
+      '<button class="hide">Hide</button>';
+    card.querySelector(".text").textContent = item.q;
+    card.querySelector(".hide").onclick = ()=>{
+      hidden.add(item.id); saveHidden();
+      card.remove(); visibleCount--; refreshLayout();
+    };
+    grid.appendChild(card);
+    visibleCount++;
+    refreshLayout();
+  }
+
+  function refreshLayout(){
+    empty.classList.toggle("hidden", visibleCount>0);
+    countEl.textContent = visibleCount ? visibleCount+(visibleCount===1?" question":" questions") : "";
+    grid.classList.toggle("sparse", visibleCount>0 && visibleCount<=3);
+  }
+
+  // JSONP fetch (works cross-origin from a static page)
+  function poll(){
+    const cb = "cb_"+Date.now();
+    window[cb] = (data)=>{
+      try{
+        if (data && data.questions){ data.questions.forEach(addQuestion); }
+      }finally{
+        delete window[cb];
+        document.getElementById(cb+"_s")?.remove();
+      }
+    };
+    const s = document.createElement("script");
+    s.id = cb+"_s";
+    s.src = ENDPOINT + "?callback=" + cb + "&t=" + Date.now();
+    s.onerror = ()=>{ delete window[cb]; s.remove(); };
+    document.body.appendChild(s);
+  }
+
+  poll();
+  setInterval(poll, POLL_MS);
+</script>
+
+</body>
+</html>
