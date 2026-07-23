@@ -17,21 +17,21 @@
   body{font-family:"Geist",-apple-system,system-ui,sans-serif;background:var(--bg);color:var(--ink);
     line-height:1.55;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
   .wrap{max-width:760px;margin:0 auto;padding:0 24px}
-
+ 
   /* header */
   header.nav{display:flex;justify-content:space-between;align-items:center;padding:22px 24px;
     max-width:1100px;margin:0 auto;border-bottom:1px solid var(--line)}
   .brand{font-weight:600;font-size:1.05rem;letter-spacing:-.02em;display:flex;align-items:center;gap:9px}
   .brand .dot{width:22px;height:22px;border-radius:50%;background:var(--forest);display:inline-block}
   .tagline{color:var(--muted);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase}
-
+ 
   /* hero */
   .hero{padding:72px 0 26px}
   .eyebrow{color:var(--muted);font-size:.75rem;letter-spacing:.16em;text-transform:uppercase;margin-bottom:22px}
   h1{font-size:clamp(2.6rem,7vw,4rem);font-weight:500;letter-spacing:-.035em;line-height:1.02}
   h1 .fade{color:#B8B4A8}
   .lead{color:#4a4a46;font-size:1.12rem;line-height:1.6;margin-top:26px;max-width:600px}
-
+ 
   /* scrolling text ticker */
   .ticker{border-top:1px solid var(--line);border-bottom:1px solid var(--line);
     overflow:hidden;white-space:nowrap;padding:16px 0;margin-top:44px}
@@ -39,7 +39,7 @@
   .ticker-track span{color:var(--muted);font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;margin:0 26px}
   .ticker-track span::before{content:"·";margin-right:26px;color:#C4C0B4}
   @keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-
+ 
   /* countdown */
   .countdown-sec{padding:54px 0 20px;text-align:center}
   .countdown-label{color:var(--muted);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;margin-bottom:22px}
@@ -49,7 +49,7 @@
   .cd-num{font-size:2.2rem;font-weight:600;letter-spacing:-.03em;line-height:1}
   .cd-lbl{color:var(--muted);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;margin-top:8px}
   .cd-target{color:var(--muted);font-size:.9rem;margin-top:18px}
-
+ 
   /* intro copy */
   .section{padding:56px 0;border-top:1px solid var(--line)}
   .section h2{font-size:1.9rem;font-weight:500;letter-spacing:-.03em;margin-bottom:14px}
@@ -57,13 +57,37 @@
   .note{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px;margin-top:24px}
   .note p{font-size:.98rem;color:#4a4a46;max-width:none}
   .note strong{color:var(--forest)}
-
+ 
   /* choice cards */
   .choose{padding:56px 0 24px;border-top:1px solid var(--line)}
   .choose .eyebrow{text-align:center}
   .choose h2{text-align:center;font-size:1.9rem;font-weight:500;letter-spacing:-.03em;margin-bottom:34px}
   .cards{display:grid;grid-template-columns:1fr 1fr;gap:18px}
   @media(max-width:620px){.cards{grid-template-columns:1fr}}
+ 
+  /* ---- mobile optimisation ---- */
+  @media(max-width:640px){
+    .wrap{padding:0 20px}
+    .hero{padding:40px 0 22px}
+    h1{font-size:2.5rem;line-height:1.05;letter-spacing:-.03em}
+    .lead{font-size:1.02rem;margin-top:22px}
+    .eyebrow{font-size:.68rem}
+    /* countdown as a clean 2x2 grid instead of 3+1 wrap */
+    .countdown{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:340px;margin:0 auto}
+    .cd-unit{min-width:0;padding:16px 8px}
+    .cd-num{font-size:2rem}
+    .countdown-sec{padding:40px 0 18px}
+    .section{padding:44px 0}
+    .section h2,.choose h2{font-size:1.6rem}
+    .choose{padding:44px 0 20px}
+    .choice-card{padding:26px 22px}
+    .panel{padding:26px 22px}
+    .top .title,.brand{font-size:.98rem}
+  }
+  @media(max-width:380px){
+    h1{font-size:2.2rem}
+    .cd-num{font-size:1.75rem}
+  }
   .choice-card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:30px 26px;
     cursor:pointer;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;box-shadow:var(--shadow)}
   .choice-card:hover{transform:translateY(-3px);box-shadow:0 6px 16px rgba(0,0,0,.08),0 18px 44px rgba(0,0,0,.09)}
@@ -73,7 +97,7 @@
   .choice-card .ic svg{width:24px;height:24px;fill:#fff}
   .choice-card h3{font-size:1.25rem;font-weight:600;letter-spacing:-.02em;margin-bottom:8px}
   .choice-card p{color:var(--muted);font-size:.94rem;line-height:1.5}
-
+ 
   /* forms (hidden until chosen) */
   .panel{display:none;margin-top:26px;background:var(--card);border:1px solid var(--line);
     border-radius:22px;padding:32px 28px;box-shadow:var(--shadow);animation:rise .3s ease}
@@ -104,30 +128,30 @@
   .status.err{display:block;background:#F6E4E4;color:#B23B3B}
   .back{background:none;border:none;color:var(--muted);font-size:.86rem;cursor:pointer;
     margin-top:18px;font-family:inherit;text-decoration:underline}
-
+ 
   footer{padding:44px 0 60px;text-align:center;color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);margin-top:20px}
   footer .disc{margin-top:8px;font-size:.76rem}
 </style>
 </head>
 <body>
-
+ 
 <header class="nav">
   <div class="brand"><span class="dot"></span> The Transformation Edge</div>
   <div class="tagline">Our New Home</div>
 </header>
-
+ 
 <div class="wrap">
-
+ 
   <section class="hero">
     <div class="eyebrow">A rural acreage vision · Western Sydney</div>
     <h1>A permanent home,<br><span class="fade">room to grow.</span></h1>
-    <p class="lead">We're working towards acquiring rural land to become our church's lasting home — a place to worship, gather, and grow together for years to come.</p>
+    <p class="lead">We're working towards acquiring rural land to become our church's lasting home, a place to worship, gather, and grow together for years to come.</p>
   </section>
-
+ 
   <div class="ticker">
     <div class="ticker-track" id="tickerTrack"></div>
   </div>
-
+ 
   <section class="countdown-sec">
     <div class="countdown-label">Working towards move-in</div>
     <div class="countdown" id="countdown">
@@ -138,7 +162,7 @@
     </div>
     <div class="cd-target">Target move-in · November 2026</div>
   </section>
-
+ 
   <section class="section">
     <h2>Where things stand</h2>
     <p>We've been prayerfully exploring rural properties across the Penrith corridor. This page is where you can ask a question or register to stay informed as the plan develops.</p>
@@ -146,7 +170,7 @@
       <p><strong>Please note:</strong> registering interest means "keep me informed." It is not a commitment to buy property, take on a loan, or act as a borrower or guarantor. The ownership structure is still being finalised with professional advisers, and nothing is binding.</p>
     </div>
   </section>
-
+ 
   <section class="choose">
     <div class="eyebrow">Get involved</div>
     <h2>How can we help?</h2>
@@ -162,7 +186,7 @@
         <p>Leave your details to receive updates as the plan develops. Not a commitment.</p>
       </div>
     </div>
-
+ 
     <!-- QUESTIONS PANEL -->
     <div class="panel" id="panel-q">
       <h3>Ask a question</h3>
@@ -184,7 +208,7 @@
       </form>
       <button class="back" onclick="reset()">← Back</button>
     </div>
-
+ 
     <!-- INTEREST PANEL -->
     <div class="panel" id="panel-i">
       <h3>Keep me informed</h3>
@@ -211,26 +235,26 @@
       <button class="back" onclick="reset()">← Back</button>
     </div>
   </section>
-
+ 
 </div>
-
+ 
 <footer>
   <div class="wrap">
     The Transformation Edge · Unit 1, 2 Harford Street, Jamisontown NSW 2750<br>
     <span class="disc">This page is for information and interest only and is not financial or legal advice.</span>
   </div>
 </footer>
-
+ 
 <script>
   const ENDPOINT = "https://script.google.com/macros/s/AKfycbxr60gubn9xamTwfklYJxdlyS32gRomt3BYAM-ayfTsl1v9n8k49Bm5tXzIc-HBEa79/exec";
-
+ 
   // ---- ticker text ----
   const tickerItems = ["A permanent home","Room to grow","Worship space ready","Building together",
     "Rural acreage vision","Space to gather","A lasting foundation","One church, one home"];
   const track = document.getElementById("tickerTrack");
   const line = tickerItems.map(t=>`<span>${t}</span>`).join("");
   track.innerHTML = line + line; // duplicate for seamless loop
-
+ 
   // ---- countdown ----
   const target = new Date("2026-11-01T00:00:00+11:00").getTime();
   function tick(){
@@ -246,7 +270,7 @@
     document.getElementById("cd-sec").textContent = String(sec).padStart(2,"0");
   }
   tick(); setInterval(tick,1000);
-
+ 
   // ---- choice cards ----
   function choose(which){
     document.getElementById("card-q").classList.toggle("active", which==="q");
@@ -263,7 +287,7 @@
     document.getElementById("panel-i").classList.remove("show");
     document.querySelector(".choose h2").scrollIntoView({behavior:"smooth",block:"center"});
   }
-
+ 
   // ---- phone: digits only, validate 10 starting with 0 ----
   function wirePhone(inputId, errId){
     const el = document.getElementById(inputId);
@@ -277,7 +301,7 @@
   function validPhone(v){ return /^0\d{9}$/.test(v); }
   wirePhone("q_phone","q_phone_err");
   wirePhone("i_phone","i_phone_err");
-
+ 
   // ---- submit handling ----
   function handle(formId, statusId, okMsg, phoneId, phoneErrId, phoneRequired){
     const form = document.getElementById(formId);
@@ -318,6 +342,6 @@
   handle("questionForm","q_status","Thank you — your question has been received.","q_phone","q_phone_err",false);
   handle("interestForm","i_status","Thank you — you've been registered to stay informed.","i_phone","i_phone_err",true);
 </script>
-
+ 
 </body>
 </html>
