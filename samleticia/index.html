@@ -225,7 +225,6 @@ function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g
 
 var WHEEL_N = 14;
 var WHEEL_SEG = 360 / WHEEL_N;
-var wheelSpinCount = 0; // accumulates so every spin keeps rotating forward, never snaps back
 
 function reveal(name, table){
   out.innerHTML =
@@ -244,11 +243,17 @@ function reveal(name, table){
   var jitter = (Math.random() * 2 - 1) * (WHEEL_SEG * 0.28);
   var spins = 5;
 
-  wheelSpinCount += spins * 360 - centerAngle + jitter;
+  // this SVG element was just created fresh above, so it always starts
+  // unrotated at 0deg — compute this spin independently every time, never
+  // carried over from a previous (now-destroyed) wheel element
+  var rotation = spins * 360 - centerAngle + jitter;
 
-  wheel.style.transform = "none";
+  wheel.style.transition = "none";
+  wheel.style.transform = "rotate(0deg)";
+  wheel.getBoundingClientRect(); // force layout so the reset above commits before animating
   requestAnimationFrame(function(){
-    wheel.style.transform = "rotate("+wheelSpinCount+"deg)";
+    wheel.style.transition = "transform 2.4s cubic-bezier(.15,.75,.2,1)";
+    wheel.style.transform = "rotate("+rotation+"deg)";
   });
 }
 
