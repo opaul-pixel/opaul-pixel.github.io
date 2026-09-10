@@ -283,9 +283,13 @@ function show(raw){
 
 document.getElementById("go").addEventListener("click",function(){
   inp.blur(); show(inp.value);
+  setTimeout(function(){ window.scrollTo({top:0, behavior:"smooth"}); }, 150);
 });
 inp.addEventListener("keydown",function(e){
-  if(e.key === "Enter"){ e.preventDefault(); inp.blur(); show(inp.value); }
+  if(e.key === "Enter"){
+    e.preventDefault(); inp.blur(); show(inp.value);
+    setTimeout(function(){ window.scrollTo({top:0, behavior:"smooth"}); }, 150);
+  }
 });
 </script>
 </body>
