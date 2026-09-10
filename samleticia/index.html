@@ -1,4 +1,4 @@
-#<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en-AU">
 <head>
 <meta charset="utf-8">
@@ -49,7 +49,7 @@ button:active{opacity:.85}
 #out{margin-top:22px;padding-bottom:24px}
 
 .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:24px;
-  text-align:center;cursor:pointer}
+  text-align:center}
 .nm{font-size:15px;color:var(--muted);margin:0 0 10px}
 .tl{font-size:12px;text-transform:uppercase;letter-spacing:1.4px;color:var(--muted);margin:6px 0 0}
 .hint{font-size:11px;color:var(--muted);margin-top:14px;opacity:.7}
@@ -235,28 +235,16 @@ function reveal(name, table){
         seq.map(function(v){return '<div>'+v+'</div>';}).join('')+
       '</div></div>'+
       '<p class="tl">Table</p>'+
-      '<p class="hint">tap to skip</p>'+
     '</div>';
 
   var track = document.getElementById("track");
-  var card = document.getElementById("card");
   var rowH = 64;
-  var finished = false;
-
-  function land(){
-    if(finished) return;
-    finished = true;
-    track.style.transition = "none";
-    track.style.transform = "translateY(-"+((seq.length-1)*rowH)+"px)";
-  }
 
   track.style.transform = "translateY(0px)";
   requestAnimationFrame(function(){
     track.style.transition = "transform 1.1s cubic-bezier(.12,.85,.15,1)";
     track.style.transform = "translateY(-"+((seq.length-1)*rowH)+"px)";
   });
-  setTimeout(function(){ finished = true; }, 1150);
-  card.addEventListener("click", land);
 }
 
 function show(raw){
