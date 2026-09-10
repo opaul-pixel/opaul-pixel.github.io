@@ -47,22 +47,20 @@ button{width:100%;margin-top:10px;padding:13px;font-size:16px;font-weight:600;bo
 button:active{opacity:.85}
 #out{margin-top:12px;padding-bottom:10px}
 
-.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 16px 20px;
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;
   text-align:center}
-.nm{font-size:14px;color:var(--muted);margin:0 0 10px}
-.tl{font-size:11px;text-transform:uppercase;letter-spacing:1.4px;color:var(--muted);margin:8px 0 0}
+.nm{font-size:14px;color:var(--muted);margin:0 0 6px}
+.tl{font-size:11px;text-transform:uppercase;letter-spacing:1.4px;color:var(--muted);margin:2px 0 0}
 
-/* spinning wheel */
-.wheel-wrap{position:relative;width:220px;height:220px;margin:4px auto 0}
-.wheel-pointer{position:absolute;top:-4px;left:50%;transform:translateX(-50%);
-  width:0;height:0;border-left:12px solid transparent;border-right:12px solid transparent;
-  border-top:20px solid var(--accent);z-index:2;filter:drop-shadow(0 2px 2px rgba(0,0,0,.35))}
-#wheelSvg{width:100%;height:100%;display:block;
-  transition:transform 2.4s cubic-bezier(.15,.75,.2,1);transform-origin:50% 50%}
-.wheel-hub{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  width:56px;height:56px;border-radius:50%;background:var(--accent);color:#fff;
-  display:flex;align-items:center;justify-content:center;font-weight:700;font-size:22px;
-  z-index:2;pointer-events:none;box-shadow:0 2px 6px rgba(0,0,0,.3)}
+/* slot reel */
+.reel-frame{height:52px;overflow:hidden;position:relative;margin:0 auto;width:100%;
+  border-radius:8px}
+.reel-frame::before,.reel-frame::after{content:"";position:absolute;left:0;right:0;
+  height:20px;z-index:2;pointer-events:none}
+.reel-frame::before{top:0;background:linear-gradient(#fff,transparent)}
+.reel-frame::after{bottom:0;background:linear-gradient(transparent,#fff)}
+.reel-track{display:flex;flex-direction:column;align-items:center}
+.reel-track div{height:52px;line-height:52px;font-size:36px;font-weight:700;color:var(--accent)}
 
 .msg{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;
   font-size:15px;color:var(--muted)}
@@ -223,37 +221,28 @@ var out = document.getElementById("out"),
 
 function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
 
-var WHEEL_N = 14;
-var WHEEL_SEG = 360 / WHEEL_N;
-
 function reveal(name, table){
+  var seq = [];
+  var start = Math.max(1, table - 5);
+  for(var n = start; n <= table; n++) seq.push(n);
+  while(seq.length < 6) seq.unshift(seq[0] > 1 ? seq[0]-1 : 14);
+
   out.innerHTML =
     '<div class="card">'+
       '<p class="nm">'+esc(name)+'</p>'+
-      '<div class="wheel-wrap">'+
-        '<div class="wheel-pointer"></div>'+
-        '<svg id="wheelSvg" viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg">\n  <path d="M130,130 L130.00,10.00 A120,120 0 0 1 182.07,21.88 Z" fill="hsl(0 72% 52%)" stroke="#1a0d10" stroke-width="1.5"/>\n  <path d="M130,130 L182.07,21.88 A120,120 0 0 1 223.82,55.18 Z" fill="hsl(26 72% 46%)" stroke="#1a0d10" stroke-width="1.5"/>\n  <path d="M130,130 L223.82,55.18 A120,120 0 0 1 246.99,103.30 Z" fill="hsl(51 72% 52%)" stroke="#1a0d10" stroke-width="1.5"/>\n  <path d="M130,130 L246.99,103.30 A120,120 0 0 1 246.99,156.70 Z" fill="hsl(77 72% 46%)" stroke="#1a0d10" stroke-width="1.5"/>\n  <path d="M130,130 L246.99,156.70 A120,120 0 0 1 223.82,204.82 Z" fill="hsl(103 72% 52%)" stroke="#1a0d10" stroke-width="1.5"/>\n  <path d="M130,130 L223.82,204.82 A120,120 0 0 1 182.07,238.12 Z" fill="hsl(129 72% 46%)" stroke="#1a0d10" stroke-width="1.5"/>\n  <path d="M130,130 L182.07,238.12 A120,120 0 0 1 130.00,250.00 Z" fill="hsl(154 72% 52%)" stroke="#1a0d10" stroke-width="1.5"/>\n  <path d="M130,130 L130.00,250.00 A120,120 0 0 1 77.93,238.12 Z" fill="hsl(180 72% 46%)" stroke="#1a0d10" stroke-width="1.5"/>\n  <path d="M130,130 L77.93,238.12 A120,120 0 0 1 36.18,204.82 Z" fill="hsl(206 72% 52%)" stroke="#1a0d10" stroke-width="1.5"/>\n  <path d="M130,130 L36.18,204.82 A120,120 0 0 1 13.01,156.70 Z" fill="hsl(231 72% 46%)" stroke="#1a0d10" stroke-width="1.5"/>\n  <path d="M130,130 L13.01,156.70 A120,120 0 0 1 13.01,103.30 Z" fill="hsl(257 72% 52%)" stroke="#1a0d10" stroke-width="1.5"/>\n  <path d="M130,130 L13.01,103.30 A120,120 0 0 1 36.18,55.18 Z" fill="hsl(283 72% 46%)" stroke="#1a0d10" stroke-width="1.5"/>\n  <path d="M130,130 L36.18,55.18 A120,120 0 0 1 77.93,21.88 Z" fill="hsl(309 72% 52%)" stroke="#1a0d10" stroke-width="1.5"/>\n  <path d="M130,130 L77.93,21.88 A120,120 0 0 1 130.00,10.00 Z" fill="hsl(334 72% 46%)" stroke="#1a0d10" stroke-width="1.5"/>\n  <text x="148.69" y="48.11" text-anchor="middle" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="17" fill="#fff" style="paint-order:stroke;stroke:#00000055;stroke-width:2px">1</text>\n  <text x="182.37" y="64.33" text-anchor="middle" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="17" fill="#fff" style="paint-order:stroke;stroke:#00000055;stroke-width:2px">2</text>\n  <text x="205.68" y="93.55" text-anchor="middle" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="17" fill="#fff" style="paint-order:stroke;stroke:#00000055;stroke-width:2px">3</text>\n  <text x="214.00" y="130.00" text-anchor="middle" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="17" fill="#fff" style="paint-order:stroke;stroke:#00000055;stroke-width:2px">4</text>\n  <text x="205.68" y="166.45" text-anchor="middle" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="17" fill="#fff" style="paint-order:stroke;stroke:#00000055;stroke-width:2px">5</text>\n  <text x="182.37" y="195.67" text-anchor="middle" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="17" fill="#fff" style="paint-order:stroke;stroke:#00000055;stroke-width:2px">6</text>\n  <text x="148.69" y="211.89" text-anchor="middle" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="17" fill="#fff" style="paint-order:stroke;stroke:#00000055;stroke-width:2px">7</text>\n  <text x="111.31" y="211.89" text-anchor="middle" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="17" fill="#fff" style="paint-order:stroke;stroke:#00000055;stroke-width:2px">8</text>\n  <text x="77.63" y="195.67" text-anchor="middle" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="17" fill="#fff" style="paint-order:stroke;stroke:#00000055;stroke-width:2px">9</text>\n  <text x="54.32" y="166.45" text-anchor="middle" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="17" fill="#fff" style="paint-order:stroke;stroke:#00000055;stroke-width:2px">10</text>\n  <text x="46.00" y="130.00" text-anchor="middle" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="17" fill="#fff" style="paint-order:stroke;stroke:#00000055;stroke-width:2px">11</text>\n  <text x="54.32" y="93.55" text-anchor="middle" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="17" fill="#fff" style="paint-order:stroke;stroke:#00000055;stroke-width:2px">12</text>\n  <text x="77.63" y="64.33" text-anchor="middle" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="17" fill="#fff" style="paint-order:stroke;stroke:#00000055;stroke-width:2px">13</text>\n  <text x="111.31" y="48.11" text-anchor="middle" dominant-baseline="middle" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="17" fill="#fff" style="paint-order:stroke;stroke:#00000055;stroke-width:2px">14</text>\n</svg>' +
-        '<div class="wheel-hub">'+table+'</div>'+
-      '</div>'+
+      '<div class="reel-frame"><div class="reel-track" id="track">'+
+        seq.map(function(v){return '<div>'+v+'</div>';}).join('')+
+      '</div></div>'+
       '<p class="tl">Table</p>'+
     '</div>';
 
-  var wheel = document.getElementById("wheelSvg");
-  var centerAngle = (table - 0.5) * WHEEL_SEG;
-  var jitter = (Math.random() * 2 - 1) * (WHEEL_SEG * 0.28);
-  var spins = 5;
+  var track = document.getElementById("track");
+  var rowH = 52;
 
-  // this SVG element was just created fresh above, so it always starts
-  // unrotated at 0deg — compute this spin independently every time, never
-  // carried over from a previous (now-destroyed) wheel element
-  var rotation = spins * 360 - centerAngle + jitter;
-
-  wheel.style.transition = "none";
-  wheel.style.transform = "rotate(0deg)";
-  wheel.getBoundingClientRect(); // force layout so the reset above commits before animating
+  track.style.transform = "translateY(0px)";
   requestAnimationFrame(function(){
-    wheel.style.transition = "transform 2.4s cubic-bezier(.15,.75,.2,1)";
-    wheel.style.transform = "rotate("+rotation+"deg)";
+    track.style.transition = "transform 1.1s cubic-bezier(.12,.85,.15,1)";
+    track.style.transform = "translateY(-"+((seq.length-1)*rowH)+"px)";
   });
 }
 
