@@ -149,6 +149,29 @@ button:active{opacity:.85}
 }
 .logo{display:block;margin:0 auto 8px;width:72px;height:72px;border-radius:18px;box-shadow:0 4px 14px rgba(0,0,0,.35)}
 .org{margin:6px 0 0;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);opacity:.9}
+
+/* event details */
+.when{margin:6px 0 0;font-size:14px;font-weight:600;color:#fff;letter-spacing:.02em}
+.when span{color:var(--gold)}
+.when2{margin:2px 0 0;font-size:13px;color:#f1e6cc;letter-spacing:.02em}
+.when2 span{color:var(--gold)}
+.where{display:inline-block;margin:0 0 12px;font-size:13px;color:var(--green);font-weight:600;text-decoration:underline}
+.cards{margin-top:22px;display:grid;gap:14px}
+.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px 14px;text-align:center}
+.card h2{margin:0 0 2px;font-size:11px;letter-spacing:1.6px;text-transform:uppercase;color:var(--red);font-weight:700}
+.card .sub{margin:0 0 12px;font-size:14px;color:var(--ink)}
+.cd{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.cd div{background:var(--green);color:#fff;border-radius:12px;padding:9px 0 7px}
+.cd b{display:block;font-size:24px;font-weight:800;line-height:1.1;font-variant-numeric:tabular-nums}
+.cd small{font-size:10px;letter-spacing:1.2px;text-transform:uppercase;opacity:.8}
+.cd-done{margin:0;padding:10px 0;font-weight:700;color:var(--green)}
+.card.due .cd div{background:var(--red)}
+.note{margin:12px 0 0;font-size:13px;color:var(--muted);line-height:1.45}
+.btns{display:flex;gap:8px;margin-top:12px}
+.btns a{flex:1;display:block;text-decoration:none;text-align:center;font-size:14px;font-weight:700;padding:11px 6px;
+  border-radius:12px;border:1.5px solid var(--green);color:var(--green);background:#fff}
+.btns a.solid{background:var(--green);color:#fff}
+.mini{display:inline-block;margin-top:10px;font-size:13px;color:var(--green);font-weight:600}
 </style>
 </head>
 <body>
@@ -161,6 +184,8 @@ button:active{opacity:.85}
   <h1>Merry Christmas</h1>
   <p class="tag">Find your group</p>
   <p class="org">The Transformation Edge</p>
+  <p class="when">Saturday 28 November 2026</p>
+  <p class="when2">Doors open 4:00 pm <span>&middot;</span> Starts 5:00 pm</p>
 </header>
 
 <main class="wrap">
@@ -171,6 +196,29 @@ button:active{opacity:.85}
            enterkeyhint="search">
     <button id="go">Unwrap My Group</button>
     <div id="out" aria-live="polite"></div>
+
+    <div class="cards">
+      <section class="card" id="evCard">
+        <h2>Christmas celebration</h2>
+        <p class="sub">Saturday 28 November 2026<br>Doors open 4:00 pm &middot; Starts 5:00 pm</p>
+        <a class="where" id="mapLink" target="_blank" rel="noopener">Unit 1, 2 Harford Street, Jamisontown NSW</a>
+        <div class="cd" id="evCd" aria-live="off"></div>
+        <div class="btns">
+          <a class="solid" id="calGoogle" target="_blank" rel="noopener">Google Calendar</a>
+          <a id="calIcs" download="TTE-Christmas-2026.ics">Apple Calendar</a>
+        </div>
+      </section>
+
+      <section class="card" id="mdCard">
+        <h2>Presentation media deadline</h2>
+        <p class="sub">Saturday 21 November 2026, 11:59 pm</p>
+        <div class="cd" id="mdCd" aria-live="off"></div>
+        <p class="note">Each team: send any videos, slides, audio or images for your presentation by the deadline. Late files may not be able to be used on the night.</p>
+        <p class="note" style="margin-top:6px">Send to <b>tedgenetwork@thetransedge.com</b></p>
+        <div id="mdSend"></div>
+        <a class="mini" id="mdIcs" download="TTE-Christmas-media-deadline.ics">Add the deadline to my calendar</a>
+      </section>
+    </div>
 
 
   </section>
@@ -407,6 +455,79 @@ inp.addEventListener("keydown", function(e){
     f.style.animationDelay = (-Math.random()*14) + "s";
     snow.appendChild(f);
   }
+})();
+
+/* ── event details — edit here ──────────────────────────────
+   Times are Sydney time (AEDT, UTC+11). Countdowns use the exact moment,
+   so they are correct wherever the guest is.
+─────────────────────────────────────────────────────────────*/
+var EVENT = {
+  title:    "The Transformation Edge Christmas Celebration",
+  startISO: "2026-11-28T17:00:00+11:00",
+    location: "Unit 1, 2 Harford Street, Jamisontown NSW 2750",
+  details:  "Doors open 4:00 pm, event starts 5:00 pm. Bring your group's food and be ready to present your song. Find your group: ",
+  deadlineISO: "2026-11-21T23:59:00+11:00",
+  mediaEmail:  "tedgenetwork@thetransedge.com"
+};
+
+(function(){
+  function p2(n){return (n<10?"0":"")+n;}
+  function utc(d){return d.getUTCFullYear()+p2(d.getUTCMonth()+1)+p2(d.getUTCDate())+"T"+p2(d.getUTCHours())+p2(d.getUTCMinutes())+p2(d.getUTCSeconds())+"Z";}
+  function ics(title,start,end,loc,desc){
+    function e(t){return String(t).replace(/\\/g,"\\\\").replace(/;/g,"\\;").replace(/,/g,"\\,").replace(/\n/g,"\\n");}
+    var L=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//TTE//Christmas//EN","CALSCALE:GREGORIAN","BEGIN:VEVENT",
+      "UID:"+utc(start)+"-tte-christmas@thetransedge","DTSTAMP:"+utc(new Date()),"DTSTART:"+utc(start)];
+    if(end) L.push("DTEND:"+utc(end));
+    L.push("SUMMARY:"+e(title));
+    if(loc) L.push("LOCATION:"+e(loc));
+    L.push("DESCRIPTION:"+e(desc),"BEGIN:VALARM","TRIGGER:-P1D","ACTION:DISPLAY","DESCRIPTION:"+e(title),"END:VALARM","END:VEVENT","END:VCALENDAR");
+    return "data:text/calendar;charset=utf-8,"+encodeURIComponent(L.join("\r\n"));
+  }
+  var start=new Date(EVENT.startISO), dl=new Date(EVENT.deadlineISO);
+  var here=location.href.split("#")[0];
+
+  var g=document.getElementById("calGoogle");
+  var gl=function(d){return utc(d);};
+  g.href="https://calendar.google.com/calendar/render?action=TEMPLATE&text="+encodeURIComponent(EVENT.title)+
+    "&dates="+gl(start)+"/"+gl(start)+"&details="+encodeURIComponent(EVENT.details+here)+
+    (EVENT.location?"&location="+encodeURIComponent(EVENT.location):"");
+  document.getElementById("calIcs").href=ics(EVENT.title,start,null,EVENT.location,EVENT.details+here);
+
+  document.getElementById("mapLink").href="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(EVENT.location);
+
+  var dlStart=new Date(dl.getTime()-3600000+60000);
+  document.getElementById("mdIcs").href=ics("TTE Christmas: team media due",dlStart,new Date(dl.getTime()+60000),"",
+    "Send your team's videos, slides, audio and images for the presentation before 11:59 pm.");
+
+  /* Prefer real .ics files sitting next to this page: iPhone/Mac open them straight
+     in Calendar. If they are not uploaded, the built-in links above still work. */
+  [["calIcs","christmas-2026.ics"],["mdIcs","media-deadline.ics"]].forEach(function(x){
+    if(!window.fetch) return;
+    fetch(x[1],{method:"HEAD"}).then(function(r){
+      if(r.ok){var el=document.getElementById(x[0]);el.href=x[1];el.removeAttribute("download");}
+    }).catch(function(){});
+  });
+
+  if(EVENT.mediaEmail){
+    document.getElementById("mdSend").innerHTML='<div class="btns"><a class="solid" href="mailto:'+EVENT.mediaEmail+
+      '?subject='+encodeURIComponent("Christmas presentation media")+'">Email your media</a></div>';
+  }
+
+  function tiles(box,target,doneMsg,card){
+    var ms=target-Date.now();
+    if(ms<=0){box.className="";box.innerHTML='<p class="cd-done">'+doneMsg+'</p>';return;}
+    var t=Math.floor(ms/1000),d=Math.floor(t/86400),h=Math.floor(t%86400/3600),m=Math.floor(t%3600/60),sc=t%60;
+    box.className="cd";
+    box.innerHTML='<div><b>'+d+'</b><small>days</small></div><div><b>'+p2(h)+'</b><small>hrs</small></div><div><b>'+p2(m)+'</b><small>mins</small></div><div><b>'+p2(sc)+'</b><small>secs</small></div>';
+    card.className=(ms<86400000)?"card due":"card";
+  }
+  var ev=document.getElementById("evCd"), md=document.getElementById("mdCd");
+  var evCard=document.getElementById("evCard"), mdCard=document.getElementById("mdCard");
+  function tick(){
+    tiles(ev,start.getTime(),"Merry Christmas! Thank you for celebrating with us.",evCard);
+    tiles(md,dl.getTime(),"The media deadline has passed.",mdCard);
+  }
+  tick(); setInterval(tick,1000);
 })();
 </script>
 </body>
