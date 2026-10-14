@@ -1,0 +1,18 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//TTE//Christmas//EN
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+UID:20261128T060000Z-tte-christmas@thetransedge
+DTSTAMP:20261015T000000Z
+DTSTART:20261128T060000Z
+SUMMARY:The Transformation Edge Christmas Celebration
+LOCATION:Unit 1\, 2 Harford Street\, Jamisontown NSW 2750
+DESCRIPTION:Doors open 4:00 pm\, event starts 5:00 pm. Bring your group's food and be ready to present your song.
+BEGIN:VALARM
+TRIGGER:-P1D
+ACTION:DISPLAY
+DESCRIPTION:The Transformation Edge Christmas Celebration
+END:VALARM
+END:VEVENT
+END:VCALENDAR
