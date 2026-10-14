@@ -204,10 +204,8 @@ button:active{opacity:.85}
         <a class="where" id="mapLink" target="_blank" rel="noopener">Unit 1, 2 Harford Street, Jamisontown NSW</a>
         <div class="cd" id="evCd" aria-live="off"></div>
         <div class="btns">
-          <a class="solid" id="calGoogle" target="_blank" rel="noopener">Google Calendar</a>
-          <a id="calIcs" href="christmas-2026.ics" type="text/calendar">Apple Calendar</a>
+          <a class="solid" id="calIcs" href="christmas-2026.ics" type="text/calendar">Add to Calendar</a>
         </div>
-        <p class="note" style="margin-top:8px">On iPhone, if nothing happens, open this page in Safari.</p>
       </section>
 
       <section class="card" id="mdCard">
@@ -465,7 +463,7 @@ var EVENT = {
   title:    "The Transformation Edge Christmas Celebration",
   startISO: "2026-11-28T17:00:00+11:00",
     location: "Unit 1, 2 Harford Street, Jamisontown NSW 2750",
-  details:  "Doors open 4:00 pm, event starts 5:00 pm. Bring your group's food and be ready to present your song. Find your group: ",
+  details:  "Doors open 4:00 pm, event starts 5:00 pm. Bring your group's food and be ready to present your song.",
   deadlineISO: "2026-11-21T23:59:00+11:00"
 };
 
@@ -473,13 +471,21 @@ var EVENT = {
   function p2(n){return (n<10?"0":"")+n;}
   function utc(d){return d.getUTCFullYear()+p2(d.getUTCMonth()+1)+p2(d.getUTCDate())+"T"+p2(d.getUTCHours())+p2(d.getUTCMinutes())+p2(d.getUTCSeconds())+"Z";}
   var start=new Date(EVENT.startISO), dl=new Date(EVENT.deadlineISO);
-  var here=location.href.split("#")[0];
 
-  var g=document.getElementById("calGoogle");
-  var gl=function(d){return utc(d);};
-  g.href="https://calendar.google.com/calendar/render?action=TEMPLATE&text="+encodeURIComponent(EVENT.title)+
-    "&dates="+gl(start)+"/"+gl(start)+"&details="+encodeURIComponent(EVENT.details+here)+
-    (EVENT.location?"&location="+encodeURIComponent(EVENT.location):"");
+  /* Android: go straight to Google Calendar with the details filled in (fewer taps
+     than downloading a file). iPhone, Mac and Windows keep using the .ics files. */
+  if(/Android/i.test(navigator.userAgent)){
+    function gcal(title,s,e,loc,det){
+      return "https://calendar.google.com/calendar/render?action=TEMPLATE&text="+encodeURIComponent(title)+
+        "&dates="+utc(s)+"/"+utc(e)+"&details="+encodeURIComponent(det)+(loc?"&location="+encodeURIComponent(loc):"");
+    }
+    var a1=document.getElementById("calIcs"), a2=document.getElementById("mdIcs");
+    a1.href=gcal(EVENT.title,start,start,EVENT.location,EVENT.details);
+    a1.target="_blank"; a1.rel="noopener"; a1.removeAttribute("type");
+    a2.href=gcal("TTE Christmas: team media due",new Date(dl.getTime()-3540000),new Date(dl.getTime()+60000),"",
+      "Send your team's videos, slides, audio and images for the presentation to tedgenetwork@thetransedge.com before 11:59 pm.");
+    a2.target="_blank"; a2.rel="noopener"; a2.removeAttribute("type");
+  }
 
   document.getElementById("mapLink").href="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(EVENT.location);
 
