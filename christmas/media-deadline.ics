@@ -1,0 +1,18 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//TTE//Christmas//EN
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+UID:20261121T120000Z-tte-christmas-media@thetransedge
+DTSTAMP:20261015T000000Z
+DTSTART:20261121T120000Z
+DTEND:20261121T130000Z
+SUMMARY:TTE Christmas: team media due
+DESCRIPTION:Send your team's videos\, slides\, audio and images for the presentation to tedgenetwork@thetransedge.com before 11:59 pm.
+BEGIN:VALARM
+TRIGGER:-P1D
+ACTION:DISPLAY
+DESCRIPTION:TTE Christmas: team media due
+END:VALARM
+END:VEVENT
+END:VCALENDAR
