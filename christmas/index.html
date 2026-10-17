@@ -19,15 +19,17 @@
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{background:var(--green-deep)}
-body{margin:0;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;color:var(--ink);overflow-x:hidden;
+body{position:relative;margin:0;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;color:var(--ink);overflow-x:hidden;
   background:radial-gradient(120% 80% at 50% 0%,#14553f 0%,var(--green) 45%,var(--green-deep) 100%);
   font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
 
-/* falling snow */
-#snow{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-.flake{position:absolute;top:-10px;background:#fff;border-radius:50%;
-  animation-name:fall;animation-timing-function:linear;animation-iteration-count:infinite}
-@keyframes fall{to{transform:translate3d(var(--drift),110vh,0)}}
+/* warm summer glow and drifting sunlight */
+#sky{position:absolute;top:0;left:0;right:0;height:560px;pointer-events:none;z-index:0;overflow:hidden}
+#sky::before{content:"";position:absolute;top:-170px;right:-150px;width:420px;height:420px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,214,110,.42) 0%,rgba(255,196,80,.18) 40%,transparent 70%)}
+.mote{position:absolute;bottom:-10px;background:#ffe9a8;border-radius:50%;box-shadow:0 0 8px 2px rgba(255,220,120,.55);
+  animation-name:rise;animation-timing-function:ease-in;animation-iteration-count:infinite}
+@keyframes rise{to{transform:translate3d(var(--drift),-560px,0)}}
 
 /* header */
 .lights{position:relative;z-index:1;height:16px;
@@ -145,7 +147,7 @@ button:active{opacity:.85}
 .footer a{color:inherit;text-decoration:none}
 
 @media (prefers-reduced-motion:reduce){
-  #snow,.lights{display:none}
+  .mote,.lights{display:none}
 }
 .logo{display:block;margin:0 auto 8px;width:72px;height:72px;border-radius:18px;box-shadow:0 4px 14px rgba(0,0,0,.35)}
 .org{margin:6px 0 0;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);opacity:.9}
@@ -176,7 +178,7 @@ button:active{opacity:.85}
 </head>
 <body>
 
-<div id="snow"></div>
+<div id="sky"></div>
 <div class="lights"></div>
 
 <header class="hero">
@@ -437,21 +439,21 @@ inp.addEventListener("keydown", function(e){
   if(e.key === "Enter"){ e.preventDefault(); go(); }
 });
 
-/* ── snow ─────────────────────────────────────────────────── */
+/* ── drifting sunlight ───────────────────────────────────── */
 (function(){
   if(reduceMotion) return;
-  var snow = document.getElementById("snow");
-  for(var i=0;i<34;i++){
+  var sky = document.getElementById("sky");
+  for(var i=0;i<24;i++){
     var f = document.createElement("span");
-    f.className = "flake";
+    f.className = "mote";
     var sz = 2 + Math.random()*4;
     f.style.left = (Math.random()*100) + "%";
     f.style.width = f.style.height = sz + "px";
-    f.style.opacity = (0.35 + Math.random()*0.55);
-    f.style.setProperty("--drift", (Math.random()*60 - 30) + "px");
-    f.style.animationDuration = (8 + Math.random()*10) + "s";
-    f.style.animationDelay = (-Math.random()*14) + "s";
-    snow.appendChild(f);
+    f.style.opacity = (0.3 + Math.random()*0.5);
+    f.style.setProperty("--drift", (Math.random()*50 - 25) + "px");
+    f.style.animationDuration = (12 + Math.random()*12) + "s";
+    f.style.animationDelay = (-Math.random()*20) + "s";
+    sky.appendChild(f);
   }
 })();
 
