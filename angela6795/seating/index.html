@@ -42,6 +42,11 @@
   .note{font-size:12.5px;color:var(--muted);margin:12px 0 0}
   .pick{list-style:none;padding:0;margin:8px 0 0;display:flex;flex-direction:column;gap:8px}
   .pick button{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;background:#fff;font-family:inherit;font-size:15px;cursor:pointer}
+  .checkin{width:100%;padding:13px;border:0;border-radius:11px;background:var(--accent);color:#fff;font-size:15.5px;font-weight:500;font-family:inherit;cursor:pointer;margin-top:16px}
+  .checkin:disabled{opacity:.55}
+  .done{margin-top:16px;padding:13px;border-radius:11px;background:#eaf3ea;border:1px solid #bcd9bc;color:#2c5c2c;font-size:14.5px}
+  .done b{font-weight:600}
+  .cierr{margin-top:12px;font-size:13.5px}
   .again{margin-top:14px;background:none;border:none;color:var(--accent);font-family:inherit;font-size:13.5px;text-decoration:underline;cursor:pointer;padding:0}
   footer{text-align:center;padding-top:24px}
   footer a{color:rgba(255,255,255,.82);text-decoration:none;font-size:12px;display:block;line-height:1.8}
@@ -84,12 +89,62 @@
 
   function setBusy(b){ go.disabled=b; go.textContent = b ? 'Searching\u2026' : 'Find my table'; }
 
+  function doneHtml(at){
+    return '<div class="done">You\u2019re checked in<b></b>'+(at?' \u00b7 '+esc(at):'')+'</div>';
+  }
+
   function renderCard(m){
     var tableHtml = m.table
       ? '<p class="tlabel">Table</p><p class="tnum">'+esc(m.table)+'</p><p class="note">Show this to a host if you need a hand finding it.</p>'
       : '<p class="tbd">Your seat is being finalised.</p><p class="note">Please check with a host on the day.</p>';
-    out.innerHTML = '<div class="result show"><p class="who">'+esc(m.name)+'</p>'+tableHtml+'</div>'+again();
+
+    var ciHtml = '';
+    if(m.checkedIn){
+      ciHtml = doneHtml(m.checkedInAt);
+    } else if(m.row){
+      ciHtml = '<button type="button" class="checkin" id="ci">Check in</button>';
+    }
+
+    out.innerHTML = '<div class="result show"><p class="who">'+esc(m.name)+'</p>'+tableHtml+ciHtml+'</div>'+again();
     bindAgain();
+
+    var ci = $('ci');
+    if(ci) ci.addEventListener('click', function(){ checkIn(m, ci); });
+  }
+
+  function checkIn(m, btn){
+    btn.disabled = true;
+    btn.textContent = 'Checking in\u2026';
+
+    var s, cb='ci_'+Date.now();
+    var t=setTimeout(function(){ cleanup(); fail('Could not reach the server. Tap to try again.'); }, 15000);
+    function cleanup(){ try{ delete window[cb]; }catch(e){ window[cb]=undefined; } if(s&&s.parentNode) s.parentNode.removeChild(s); }
+    function fail(msg){
+      btn.disabled=false; btn.textContent='Check in';
+      var prev=document.querySelector('.cierr'); if(prev) prev.parentNode.removeChild(prev);
+      var d=document.createElement('p'); d.className='cierr bad'; d.textContent=msg;
+      btn.parentNode.appendChild(d);
+    }
+
+    window[cb]=function(res){
+      clearTimeout(t); cleanup();
+      if(!res || (res.status!=='ok' && res.status!=='already')){
+        fail((res && res.message) ? res.message : 'Check-in failed. Please see a host.');
+        return;
+      }
+      m.checkedIn = true;
+      m.checkedInAt = res.at || '';
+      btn.outerHTML = doneHtml(res.at);
+    };
+
+    var qs = 'action=checkIn&callback='+encodeURIComponent(cb)+
+             '&client='+CLIENT+
+             '&row='+encodeURIComponent(m.row)+
+             '&name='+encodeURIComponent(m.name);
+    s=document.createElement('script');
+    s.src=ENDPOINT+'?'+qs;
+    s.onerror=function(){ clearTimeout(t); cleanup(); fail('Could not reach the server. Tap to try again.'); };
+    document.body.appendChild(s);
   }
   function renderPick(rows){
     var items = rows.map(function(r,i){ return '<li><button type="button" data-i="'+i+'">'+esc(r.name)+'</button></li>'; }).join('');
