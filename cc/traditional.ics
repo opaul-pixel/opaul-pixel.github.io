@@ -1,0 +1,15 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Echo Labs Group//Wedding//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:traditional-2026@echolabsgroup.com
+DTSTAMP:20260706T000000Z
+DTSTART:20261205T060000Z
+DTEND:20261205T123000Z
+SUMMARY:Christian & Cristina - Igbo Traditional Wedding
+LOCATION:The Highline Venue\, Level 3/462 Chapel Rd\, Bankstown NSW 2200
+DESCRIPTION:Doors open 5pm for a 6pm start. A child-free celebration.
+END:VEVENT
+END:VCALENDAR

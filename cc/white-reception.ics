@@ -1,0 +1,15 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Echo Labs Group//Wedding//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:white-reception-2026@echolabsgroup.com
+DTSTAMP:20260706T000000Z
+DTSTART:20261212T060000Z
+DTEND:20261212T123000Z
+SUMMARY:Christian & Cristina - Reception
+LOCATION:Paradiso Receptions\, 118 Ware St\, Fairfield NSW 2165
+DESCRIPTION:Doors open 5pm for a 6pm start. A child-free celebration.
+END:VEVENT
+END:VCALENDAR
