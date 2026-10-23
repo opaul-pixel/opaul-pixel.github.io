@@ -116,6 +116,9 @@
   .reveal.show{display:block}
   .btn{width:100%;padding:14px;border:0;border-radius:12px;background:var(--accent);color:var(--accent-ink);font-size:16px;font-weight:500;font-family:inherit;cursor:pointer;margin-top:6px;transition:background .15s}
   .update-btns{display:flex;flex-direction:column;gap:10px;margin-top:18px}
+  .closed-h{font-family:Fraunces,serif;font-size:22px;margin:4px 0 10px;text-align:center;color:var(--ink)}
+  .closed-b{font-size:14.5px;line-height:1.6;color:var(--muted);text-align:center;margin:0 0 20px}
+  .closed-cta{display:block;text-align:center;text-decoration:none;box-sizing:border-box}
   .update-btns .btn{margin-top:0}
   .btn-ghost{background:transparent;color:var(--accent);border:1px solid var(--line)}
   .btn-ghost:hover{background:rgba(0,0,0,.04)}
@@ -349,6 +352,19 @@
     paintCd('r', RSVPEND-now, 'RSVPs have now closed.');
   }
   tick(); setInterval(tick, 1000);
+
+  /* Once RSVPs have closed, retire the form and point guests at their table.
+     The countdown already said closed; the form underneath was still live. */
+  (function(){
+    if(Date.now() <= RSVPEND) return;
+    var card = document.getElementById('card');
+    if(!card) return;
+    card.innerHTML =
+      '<p class="closed-h">RSVPs are now closed</p>' +
+      '<p class="closed-b">Thank you to everyone who replied. If you have already RSVPed, ' +
+      'you can look up your table on the night.</p>' +
+      '<a class="btn closed-cta" href="seating/">Find your table</a>';
+  })();
 
   /* Audio: seamless loop via Web Audio API */
   var audioCtx, audioBuffer, audioSource, gainNode, audioReady=false, audioMuted=false;
