@@ -6,10 +6,10 @@ METHOD:PUBLISH
 BEGIN:VEVENT
 UID:angela6795-60th@echolabsgroup.com
 DTSTAMP:20260101T000000Z
-DTSTART:20261025T060000Z
+DTSTART:20261025T050000Z
 DTEND:20261025T130000Z
 SUMMARY:Brett Stapleton's 60th Birthday Celebration
 LOCATION:The Parks Venue\, 2-8 Elizabeth Street\, Wetherill Park NSW 2164
-DESCRIPTION:Doors open at 5pm for a 6pm start. A child-free celebration.
+DESCRIPTION:Doors open at 4pm for a 6pm start. A child-free celebration.
 END:VEVENT
 END:VCALENDAR
