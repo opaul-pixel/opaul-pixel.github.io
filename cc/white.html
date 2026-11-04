@@ -483,6 +483,27 @@ function offerUpdate(res){
 }
 
   send.addEventListener('click', function(){ submit(); });
+
+// Once the RSVP deadline has passed, retire the form. Runs last so every
+// listener above is already attached and nothing throws on a missing field.
+// Re-checked on an interval so a tab left open overnight closes itself too.
+(function(){
+  function retire(){
+    if(Date.now() <= RSVPEND) return false;
+    var c = document.getElementById('card');
+    if(!c) return true;
+    c.innerHTML =
+      '<div class="done">'+
+        '<h2>RSVPs have now closed.</h2>'+
+        '<p>Thank you to everyone who replied. If you still need to reach '+
+        'Christian &amp; Cristina about your attendance, please contact them directly.</p>'+
+      '</div>';
+    return true;
+  }
+  if(!retire()){
+    var iv = setInterval(function(){ if(retire()) clearInterval(iv); }, 30000);
+  }
+})();
 </script>
 </body>
 </html>
