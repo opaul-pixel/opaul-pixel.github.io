@@ -210,7 +210,7 @@
   var CLIENT = "christian-cristina-traditional";
 
   var WEDDING = new Date('2026-12-05T18:00:00+11:00').getTime();
-  var RSVPEND = new Date('2026-11-14T23:59:59+11:00').getTime();
+  var RSVPEND = new Date('2026-11-04T20:00:00+11:00').getTime();
 
   function paintCd(pfx, ms, doneMsg){
     var grid = document.getElementById(pfx+'-grid');
@@ -464,6 +464,20 @@
 }
 
 send.addEventListener('click', function(){ submit(); });
+
+// Once the RSVP deadline has passed, retire the form. Runs last so every
+// listener above is already attached and nothing throws on a missing field.
+(function(){
+  if(Date.now() <= RSVPEND) return;
+  var c = document.getElementById('card');
+  if(!c) return;
+  c.innerHTML =
+    '<div class="done">'+
+      '<h2>RSVPs have now closed.</h2>'+
+      '<p>Thank you to everyone who replied. If you still need to reach '+
+      'Christian &amp; Cristina about your attendance, please contact them directly.</p>'+
+    '</div>';
+})();
 </script>
 </body>
 </html>
