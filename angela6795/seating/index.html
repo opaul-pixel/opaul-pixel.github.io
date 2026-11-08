@@ -1,82 +1,28 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-AU">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Find Your Table — Brett's 60th</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Brett's 60th | Thank You</title>
 <style>
-  :root{
-    --card:#fbfaf7; --ink:#1c2230; --muted:#6b7280;
-    --line:#d9dee7; --accent:#4a7fa3; --accent-ink:#fff; --err:#b23a2e;
-    --hero-photo:url('../brett.jpg');
-  }
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{margin:0;color:#fff;font-family:Inter,system-ui,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased;
-    display:flex;flex-direction:column;align-items:center;min-height:100vh;padding:34px 16px;
-    background-color:var(--accent);
-    background-image:linear-gradient(rgba(18,40,59,.84),rgba(18,40,59,.94)),var(--hero-photo);
-    background-size:cover;background-position:center;background-repeat:no-repeat;
-    background-attachment:fixed}
-  .stage{width:100%;max-width:440px;flex:1;display:flex;flex-direction:column}
-  .mid{flex:1;display:flex;flex-direction:column;justify-content:center}
-  .hero{text-align:center;margin:0 0 22px}
-  .names{font-family:Fraunces,serif;font-weight:500;font-size:36px;line-height:1.06;margin:0}
-  .sub{font-family:Fraunces,serif;font-style:italic;margin:10px 0 0;font-size:15px;opacity:.9}
-  .card{background:var(--card);color:var(--ink);border-radius:16px;padding:22px 20px}
-  label{display:block;font-weight:500;font-size:14px;margin:0 0 6px}
-  input[type=text]{width:100%;padding:12px 13px;border:1px solid var(--line);border-radius:10px;font-size:16px;background:#fff;color:var(--ink);font-family:inherit}
-  input:focus{outline:none;border-color:var(--accent)}
-  .btn{width:100%;padding:14px;border:0;border-radius:12px;background:var(--accent);color:var(--accent-ink);font-size:16px;font-weight:500;font-family:inherit;cursor:pointer;margin-top:12px}
-  .btn:disabled{opacity:.6}
-  .out{margin-top:18px}
-  .hint{font-size:13.5px;color:var(--muted);text-align:center;margin:0}
-  .bad{color:var(--err)}
-  .result{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px;text-align:center;opacity:0;transform:translateY(4px);transition:.25s}
-  .result.show{opacity:1;transform:none}
-  .who{font-family:Fraunces,serif;font-size:20px;margin:0 0 6px}
-  .tlabel{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:10px 0 0}
-  .tnum{font-family:Fraunces,serif;font-size:44px;margin:2px 0 0}
-  .tbd{font-family:Fraunces,serif;font-style:italic;font-size:17px;margin:10px 0 0;color:var(--muted)}
-  .note{font-size:12.5px;color:var(--muted);margin:12px 0 0}
-  .pick{list-style:none;padding:0;margin:8px 0 0;display:flex;flex-direction:column;gap:8px}
-  .pick button{width:100%;padding:11px;border:1px solid var(--line);border-radius:10px;background:#fff;font-family:inherit;font-size:15px;cursor:pointer}
-  .checkin{width:100%;padding:13px;border:0;border-radius:11px;background:var(--accent);color:#fff;font-size:15.5px;font-weight:500;font-family:inherit;cursor:pointer;margin-top:16px}
-  .checkin:disabled{opacity:.55}
-  .done{margin-top:16px;padding:13px;border-radius:11px;background:#eaf3ea;border:1px solid #bcd9bc;color:#2c5c2c;font-size:14.5px}
-  .done b{font-weight:600}
-  .cierr{margin-top:12px;font-size:13.5px}
-  .closed-h{font-family:Fraunces,serif;font-size:21px;line-height:1.3;margin:2px 0 12px;text-align:center;color:var(--ink)}
-  .closed-b{font-size:14.5px;line-height:1.6;color:var(--muted);text-align:center;margin:0}
-  .again{margin-top:14px;background:none;border:none;color:var(--accent);font-family:inherit;font-size:13.5px;text-decoration:underline;cursor:pointer;padding:0}
-  footer{text-align:center;padding-top:24px}
-  footer a{color:rgba(255,255,255,.82);text-decoration:none;font-size:12px;display:block;line-height:1.8}
-  .tag{letter-spacing:.16em;text-transform:uppercase;font-size:10.5px;opacity:.9}
+  html,body{height:100%;margin:0}
+  body{display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;
+    font-family:Georgia,"Times New Roman",serif;color:#f6efe4;
+    background:radial-gradient(ellipse at 50% 30%,#3a2a14,#14100a 70%)}
+  main{max-width:520px}
+  .eyebrow{letter-spacing:.3em;font-size:.75rem;color:#e7c982;text-transform:uppercase}
+  h1{font-size:clamp(2rem,8vw,3rem);font-weight:normal;margin:.5em 0 .3em}
+  .line{width:70px;height:1px;background:#e7c982;margin:1.4rem auto;opacity:.7}
+  p{font-size:1.1rem;line-height:1.7;margin:.6em 0;color:#eadfca}
 </style>
 </head>
 <body>
-<div class="stage">
-  <div class="mid">
-    <div class="hero">
-      <p class="names">Brett Stapleton</p>
-      <p class="sub">60th Birthday Celebration</p>
-    </div>
-
-    <div class="card">
-      <p class="closed-h">Thank you for celebrating with Brett</p>
-      <p class="closed-b">The seating lookup has now closed. We hope you had a wonderful night.</p>
-    </div>
-  </div>
-
-  <footer>
-    <a href="https://echolabsgroup.com" target="_blank" rel="noopener">Brought to you by ECHOLABSGROUP.COM</a>
-    <a class="tag" href="https://echolabsgroup.com" target="_blank" rel="noopener">Plugged In. Stage Ready.</a>
-    <a href="mailto:team@echolabsgroup.com?subject=Digital%20seating%20page%20enquiry">Enquire about your own · team@echolabsgroup.com</a>
-  </footer>
-</div>
-
-<!-- lookup removed: the event has passed -->
+<main>
+  <div class="eyebrow">Brett's 60th</div>
+  <h1>Thank you for celebrating with us.</h1>
+  <div class="line"></div>
+  <p>RSVPs and seating are now closed. It was a wonderful night.</p>
+</main>
 </body>
 </html>
