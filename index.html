@@ -160,6 +160,17 @@
       100% { transform: translateX(-50%); }
     }
 
+    /* ── SERVICE DISCOVERY ── */
+    .services-section { max-width: 1000px; margin: 0 auto; padding: 64px 32px 24px; }
+    .services-section h2 { font-size: clamp(28px, 3.5vw, 44px); font-weight: 500; letter-spacing: -0.03em; line-height: 1.15; margin: 12px 0 14px; }
+    .services-intro { color: rgba(26,26,28,.58); font-size: 15px; max-width: 650px; margin-bottom: 30px; }
+    .service-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px; }
+    .service-card { border: 1px solid var(--border); border-radius: 14px; padding: 27px; text-decoration: none; color: var(--dark); display: block; transition: border-color .2s, transform .2s; }
+    .service-card:hover, .service-card:focus-visible { border-color: rgba(26,26,28,.55); transform: translateY(-2px); }
+    .service-card h3 { font-size: 21px; font-weight: 500; letter-spacing: -0.025em; margin-bottom: 12px; }
+    .service-card p { font-size: 14px; font-weight: 300; color: rgba(26,26,28,.63); }
+    .service-card span { display: inline-block; font-size: 13px; font-weight: 500; margin-top: 18px; }
+    @media (max-width: 600px) { .services-section { padding: 40px 16px 12px; } .service-grid { grid-template-columns: 1fr; } }
     /* ── FORM SECTION ── */
     .form-section {
       max-width: 780px;
@@ -456,6 +467,19 @@
       <div class="ticker-item"><span class="ticker-dot"></span>Digital RSVP & Seating</div>
     </div>
   </div>
+
+  <!-- SERVICES -->
+  <section class="services-section" id="services" aria-labelledby="services-heading">
+    <p class="section-label">What we do</p>
+    <h2 id="services-heading">Technical services for events, venues and homes.</h2>
+    <p class="services-intro">Explore our event production, audiovisual installation, live streaming and technical consulting services. Each project starts with an understanding of your goals, equipment and venue.</p>
+    <div class="service-grid">
+      <a class="service-card" href="/event-production.html"><h3>Event Production</h3><p>Live sound, lighting, staging coordination and technical operations for events.</p><span>Explore event production →</span></a>
+      <a class="service-card" href="/av-installation.html"><h3>AV Installation</h3><p>Audio and visual systems for venues, meeting spaces and homes.</p><span>Explore AV installation →</span></a>
+      <a class="service-card" href="/livestreaming.html"><h3>Live Streaming</h3><p>Technical workflows for live streams, virtual and hybrid events.</p><span>Explore livestream services →</span></a>
+      <a class="service-card" href="/technical-consulting.html"><h3>Technical Consulting</h3><p>AV planning, troubleshooting, systems review and on-site technical support.</p><span>Explore technical consulting →</span></a>
+    </div>
+  </section>
 
   <!-- FORM -->
   <section class="form-section" id="start">
