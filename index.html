@@ -441,7 +441,7 @@
   <section class="hero">
     <p class="hero-eyebrow">AV, IT & Event Production · Australia</p>
     <h1 class="hero-headline">Your project,<br><em>expertly</em><br>delivered.</h1>
-    <p class="hero-body">Echo Labs provides the technical expertise behind events, venues and connected spaces. From live sound, lighting and event production to AV design, installation and system setup, we help bring the details together. We also offer invitation design and digital RSVP and seating solutions.</p>
+    <p class="hero-body">Echo Labs provides technical services for events, venues, businesses and homes. From live sound, lighting and event production to AV installation, smart home integration and device troubleshooting, we help bring the details together. We also offer invitation design, digital RSVP and event seating solutions.</p>
   </section>
 
   <!-- TICKER -->
@@ -472,12 +472,14 @@
   <section class="services-section" id="services" aria-labelledby="services-heading">
     <p class="section-label">What we do</p>
     <h2 id="services-heading">Event production and AV services, built around your project.</h2>
-    <p class="services-intro">Explore our event production, AV installation, live streaming and technical consulting services. We start by understanding your objectives, venue and existing equipment.</p>
+    <p class="services-intro">Explore event production, live sound, lighting, AV installation, live streaming, technical consulting, smart home support and digital event services. We start by understanding your objectives and existing setup.</p>
     <div class="service-grid">
       <a class="service-card" href="/event-production.html"><h3>Event Production</h3><p>Live sound, lighting, staging and technical support for events.</p><span>Explore event production →</span></a>
       <a class="service-card" href="/av-installation.html"><h3>AV Installation</h3><p>AV system design, installation and integration for venues, workplaces and homes.</p><span>Explore AV installation →</span></a>
       <a class="service-card" href="/livestreaming.html"><h3>Live Streaming</h3><p>Live streaming production and technical support for virtual and hybrid events.</p><span>Explore livestream services →</span></a>
       <a class="service-card" href="/technical-consulting.html"><h3>Technical Consulting</h3><p>AV system planning, troubleshooting and on-site technical support.</p><span>Explore technical consulting →</span></a>
+      <a class="service-card" href="/smart-home.html"><h3>Smart Home Integration & Troubleshooting</h3><p>Connected device setup, home automation, Wi-Fi, cameras and home entertainment troubleshooting.</p><span>Explore smart home services →</span></a>
+      <a class="service-card" href="/digital-event-services.html"><h3>Digital Event Services</h3><p>Invitation design, digital RSVP workflows and event seating management.</p><span>Explore digital event services →</span></a>
     </div>
   </section>
 
@@ -517,6 +519,7 @@
         <div class="option-group" id="project-type-group">
           <label class="option-label"><input type="radio" name="project_type" value="Event Production" required>Event Production</label>
           <label class="option-label"><input type="radio" name="project_type" value="Home Installation">Home Installation</label>
+          <label class="option-label"><input type="radio" name="project_type" value="Smart Home / Device Troubleshooting">Smart Home / Device Troubleshooting</label>
           <label class="option-label"><input type="radio" name="project_type" value="Venue Installation">Venue Installation</label>
           <label class="option-label"><input type="radio" name="project_type" value="Technical Operator">Technical Operator</label>
           <label class="option-label"><input type="radio" name="project_type" value="Consulting / Advisory">Consulting / Advisory</label>
@@ -549,6 +552,7 @@
           <label class="option-label"><input type="checkbox" name="install_type" value="Networking / Wi-Fi">Networking / Wi-Fi</label>
           <label class="option-label"><input type="checkbox" name="install_type" value="TV mounting / display">TV mounting / display</label>
           <label class="option-label"><input type="checkbox" name="install_type" value="Full home AV">Full home AV</label>
+          <label class="option-label"><input type="checkbox" name="install_type" value="Smart device troubleshooting">Smart device troubleshooting</label>
           <label class="option-label"><input type="checkbox" name="install_type" value="Not sure, help me figure it out">Not sure, help me figure it out</label>
         </div>
       </div>
@@ -638,7 +642,7 @@
         // Reveal the relevant follow-on group
         if (this.value === 'Event Production') {
           eventField.classList.add('visible');
-        } else if (this.value === 'Home Installation') {
+        } else if (this.value === 'Home Installation' || this.value === 'Smart Home / Device Troubleshooting') {
           homeField.classList.add('visible');
         }
       });
