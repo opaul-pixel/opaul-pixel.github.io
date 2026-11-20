@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#140A0C; --bg-2:#1E0E12; --surface:rgba(255,255,255,.055); --surface-2:rgba(255,255,255,.08); --line:rgba(227,137,155,.22); --text:#F6EFEF; --muted:#B9A4A7; --accent:#B33A52; --accent-deep:#73182A; --accent-lite:#DD8296; --hi:#E6C79F; --glow:rgba(196,73,95,.40);
+    --bg:#140A0C; --bg-2:#1E0E12; --surface:rgba(255,255,255,.055); --surface-2:rgba(255,255,255,.08); --line:rgba(227,137,155,.22); --text:#F6EFEF; --muted:#B9A4A7; --accent:#B33A52; --accent-deep:#73182A; --accent-lite:#DD8296; --hi:#E6C79F; --display:#F6EFEF; --eyebrow:#F6EFEF; --glow:rgba(196,73,95,.40);
     --radius:22px;
     --photo:url('../igbo-traditional.jpg');
     --focus:center 26%;
@@ -48,11 +48,11 @@
   .portrait img{width:100%; height:100%; object-fit:cover; object-position:var(--focus); display:block}
 
   .eyebrow{display:flex; align-items:center; gap:9px; margin:26px 0 10px;
-    font-size:11.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--text); opacity:.75}
+    font-size:11.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--eyebrow); opacity:.75}
   .dot{width:8px; height:8px; border-radius:50%; background:var(--hi); flex:none}
 
   h1{font-family:Fraunces,Georgia,serif; font-weight:500; font-size:40px; line-height:1.06;
-    margin:0; letter-spacing:-.01em}
+    margin:0; letter-spacing:-.01em; color:var(--display)}
   .occasion{font-family:Fraunces,Georgia,serif; font-style:italic; font-weight:400;
     font-size:23px; color:var(--hi); margin:8px 0 0}
 
@@ -66,7 +66,7 @@
   .row span{display:block; font-size:13.5px; color:var(--muted); margin-top:2px}
 
   .cta-wrap{text-align:center; margin:auto 0 0; padding:38px 0 0}
-  .cta-lead{font-weight:600; font-size:17px; margin:0}
+  .cta-lead{font-weight:600; font-size:17px; margin:0; color:var(--display)}
   .cta-sub{font-size:14px; color:var(--muted); margin:5px 0 0}
   .cta{position:relative; display:grid; place-items:center; width:104px; height:104px;
     margin:24px auto 0; border:0; border-radius:50%; cursor:pointer; padding:0;
@@ -97,7 +97,7 @@
     background:linear-gradient(to bottom, transparent 8%, color-mix(in srgb, var(--bg) 55%, transparent) 55%, var(--bg) 97%)}
 
   h2{font-family:Fraunces,Georgia,serif; font-weight:500; font-size:38px; margin:-26px 0 0;
-    position:relative; z-index:2; letter-spacing:-.01em}
+    position:relative; z-index:2; letter-spacing:-.01em; color:var(--display)}
   .lead{font-size:15.5px; color:var(--muted); margin:8px 0 0}
 
   .field{margin:20px 0 0}
@@ -118,7 +118,7 @@
   .result{background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
     padding:24px 20px; text-align:center; opacity:0; transform:translateY(5px); transition:.25s}
   .result.show{opacity:1; transform:none}
-  .who{font-family:Fraunces,Georgia,serif; font-size:22px; margin:0}
+  .who{font-family:Fraunces,Georgia,serif; font-size:22px; margin:0; color:var(--display)}
   .tlabel{font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted); margin:16px 0 0}
   .tnum{font-family:Fraunces,Georgia,serif; font-size:60px; line-height:1; margin:6px 0 0;
     color:var(--hi)}
