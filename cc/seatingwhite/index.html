@@ -43,7 +43,8 @@
   @media (prefers-reduced-motion:reduce){ .sp{animation:none; opacity:.5} }
 
   /* ---------- welcome ---------- */
-  .portrait{position:relative; width:100%; max-width:430px; margin:34px auto 0; aspect-ratio:16 / 9;
+  .kicker{text-align:center; margin:18px 0 0}
+  .portrait{position:relative; width:100%; max-width:430px; margin:18px auto 0; aspect-ratio:16 / 9;
     border-radius:18px; overflow:hidden; box-shadow:0 0 48px var(--glow), 0 18px 40px rgba(0,0,0,.35);}
   .portrait img{width:100%; height:100%; object-fit:cover; object-position:var(--focus); display:block}
   .portrait video{width:100%; height:100%; object-fit:cover; object-position:center 20%; display:block;
@@ -56,7 +57,7 @@
   .sound svg{width:20px; height:20px; stroke:#fff; fill:none; stroke-width:1.9;
     stroke-linecap:round; stroke-linejoin:round}
 
-  .eyebrow{display:flex; align-items:center; gap:9px; margin:26px 0 10px;
+  .eyebrow{display:flex; align-items:center; gap:9px; margin:18px 0 9px;
     font-size:11.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--eyebrow); opacity:.75}
   .dot{width:8px; height:8px; border-radius:50%; background:var(--hi); flex:none}
 
@@ -65,7 +66,7 @@
   .occasion{font-family:Fraunces,Georgia,serif; font-style:italic; font-weight:400;
     font-size:23px; color:var(--hi); margin:8px 0 0}
 
-  .info{margin:26px 0 0; border:1px solid var(--line); border-radius:var(--radius);
+  .info{margin:20px 0 0; border:1px solid var(--line); border-radius:var(--radius);
     background:var(--surface); overflow:hidden}
   .row{display:flex; gap:14px; padding:16px 17px; align-items:flex-start}
   .row + .row{border-top:1px solid var(--line)}
@@ -74,7 +75,7 @@
   .row b{display:block; font-weight:600; font-size:15.5px; letter-spacing:-.005em}
   .row span{display:block; font-size:13.5px; color:var(--muted); margin-top:2px}
 
-  .cta-wrap{text-align:center; margin:auto 0 0; padding:38px 0 0}
+  .cta-wrap{text-align:center; margin:auto 0 0; padding:26px 0 0}
   .cta-lead{font-weight:600; font-size:17px; margin:0; color:var(--display)}
   .cta-sub{font-size:14px; color:var(--muted); margin:5px 0 0}
   .cta{position:relative; display:grid; place-items:center; width:104px; height:104px;
@@ -101,9 +102,10 @@
     border-radius:999px; padding:9px 22px; white-space:nowrap}
 
   .banner{position:relative; margin:18px -18px 0; height:252px; overflow:hidden}
-  .banner img{width:100%; height:100%; object-fit:cover; object-position:var(--focus); display:block}
+  .banner img{width:100%; height:100%; object-fit:cover; object-position:center 22%; display:block}
   .banner::after{content:''; position:absolute; inset:0;
-    background:linear-gradient(to bottom, transparent 8%, color-mix(in srgb, var(--bg) 55%, transparent) 55%, var(--bg) 97%)}
+    background:linear-gradient(to bottom, var(--bg) 0%, transparent 12%,
+      color-mix(in srgb, var(--bg) 45%, transparent) 60%, var(--bg) 100%)}
 
   h2{font-family:Fraunces,Georgia,serif; font-weight:500; font-size:38px; margin:-26px 0 0;
     position:relative; z-index:2; letter-spacing:-.01em; color:var(--display)}
@@ -165,6 +167,7 @@
 <section class="screen" id="welcome">
   <div class="sparkles"><svg class="sp" style="top:7%;left:86%;width:15px;height:15px;animation-delay:0.0s" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c.6 7 4.4 10.8 12 12-7.6 1.2-11.4 5-12 12-.6-7-4.4-10.8-12-12 7.6-1.2 11.4-5 12-12z"/></svg><svg class="sp" style="top:14%;left:8%;width:11px;height:11px;animation-delay:1.3s" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c.6 7 4.4 10.8 12 12-7.6 1.2-11.4 5-12 12-.6-7-4.4-10.8-12-12 7.6-1.2 11.4-5 12-12z"/></svg><svg class="sp" style="top:22%;left:93%;width:9px;height:9px;animation-delay:2.4s" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c.6 7 4.4 10.8 12 12-7.6 1.2-11.4 5-12 12-.6-7-4.4-10.8-12-12 7.6-1.2 11.4-5 12-12z"/></svg><svg class="sp" style="top:33%;left:4%;width:13px;height:13px;animation-delay:0.7s" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c.6 7 4.4 10.8 12 12-7.6 1.2-11.4 5-12 12-.6-7-4.4-10.8-12-12 7.6-1.2 11.4-5 12-12z"/></svg><svg class="sp" style="top:44%;left:90%;width:10px;height:10px;animation-delay:1.9s" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c.6 7 4.4 10.8 12 12-7.6 1.2-11.4 5-12 12-.6-7-4.4-10.8-12-12 7.6-1.2 11.4-5 12-12z"/></svg><svg class="sp" style="top:57%;left:7%;width:12px;height:12px;animation-delay:3.1s" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c.6 7 4.4 10.8 12 12-7.6 1.2-11.4 5-12 12-.6-7-4.4-10.8-12-12 7.6-1.2 11.4-5 12-12z"/></svg><svg class="sp" style="top:68%;left:94%;width:9px;height:9px;animation-delay:0.4s" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c.6 7 4.4 10.8 12 12-7.6 1.2-11.4 5-12 12-.6-7-4.4-10.8-12-12 7.6-1.2 11.4-5 12-12z"/></svg><svg class="sp" style="top:78%;left:11%;width:14px;height:14px;animation-delay:2.2s" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c.6 7 4.4 10.8 12 12-7.6 1.2-11.4 5-12 12-.6-7-4.4-10.8-12-12 7.6-1.2 11.4-5 12-12z"/></svg></div>
   <div class="wrap">
+    <p class="kicker"><span class="pill">Find your table</span></p>
     <div class="portrait"><video id="herovid" autoplay muted loop playsinline preload="metadata"
            poster="../white-hero-poster.jpg" aria-label="Christian and Cristina">
       <source src="../white-hero.mp4" type="video/mp4">
@@ -192,7 +195,7 @@
 
     <div class="cta-wrap">
       <p class="cta-lead">Tap to find your table.</p>
-      <p class="cta-sub">You&rsquo;ll type the first few letters of your name.</p>
+      <p class="cta-sub">You&rsquo;ll enter the mobile number you RSVP&rsquo;d with, or your name.</p>
       <button class="cta" id="start" aria-label="Find your table">
         <svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
       </button>
@@ -217,14 +220,14 @@
       <span class="pill">White Wedding</span>
     </div>
 
-    <div class="banner"><img src="../white-wedding.jpg" alt=""></div>
+    <div class="banner"><img src="../white-banner.jpg" alt=""></div>
 
     <h2>Find your table</h2>
-    <p class="lead">Type the first few letters of your name.</p>
+    <p class="lead">Enter the mobile number you RSVP&rsquo;d with. No luck? Try your name instead.</p>
 
     <div class="field">
       <label for="q" style="position:absolute;left:-9999px">Your name or mobile</label>
-      <input type="text" id="q" placeholder="e.g. Chidinma Okafor or 0412345678" autocomplete="name" autocapitalize="words">
+      <input type="text" id="q" placeholder="Mobile number or name" autocomplete="tel" inputmode="text" autocapitalize="words">
       <button class="btn" id="go">Find my table</button>
       <div class="out" id="out"></div>
     </div>
@@ -339,7 +342,7 @@
     });
   }
   function renderNone(name){
-    out.innerHTML = '<div class="result show"><p class="hint">No match for \u201c'+esc(name)+'\u201d. Check the spelling, try your full name, or ask a host.</p></div>'+again();
+    out.innerHTML = '<div class="result show"><p class="hint">No match for \u201c'+esc(name)+'\u201d. Try the mobile number you RSVP\u2019d with, or your full name. A host can help.</p></div>'+again();
     bindAgain();
   }
   function renderErr(){
