@@ -43,12 +43,12 @@
   @media (prefers-reduced-motion:reduce){ .sp{animation:none; opacity:.5} }
 
   /* ---------- welcome ---------- */
-  .portrait{position:relative; width:62%; max-width:230px; margin:34px auto 0; aspect-ratio:3/4;
+  .portrait{position:relative; width:62%; max-width:230px; margin:34px auto 0; aspect-ratio:3 / 4;
     border-radius:18px; overflow:hidden; box-shadow:0 0 48px var(--glow), 0 18px 40px rgba(0,0,0,.35);}
   .portrait img{width:100%; height:100%; object-fit:cover; object-position:var(--focus); display:block}
   .portrait video{width:100%; height:100%; object-fit:cover; object-position:center 20%; display:block;
     background:var(--bg-2)}
-  .sound{position:absolute; right:10px; bottom:10px; width:42px; height:42px; padding:0;
+  .sound{position:absolute; left:10px; bottom:10px; width:42px; height:42px; padding:0;
     border-radius:50%; border:1px solid rgba(255,255,255,.35); cursor:pointer;
     background:rgba(0,0,0,.5); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
     display:grid; place-items:center; transition:transform .15s}
@@ -155,7 +155,7 @@
   .tag{letter-spacing:.16em; text-transform:uppercase; font-size:10.5px}
 
   @media (max-width:360px){
-    h1{font-size:34px} h2{font-size:32px} .portrait{width:68%}
+    h1{font-size:34px} h2{font-size:32px}
   }
 </style>
 </head>
