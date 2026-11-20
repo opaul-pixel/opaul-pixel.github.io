@@ -195,7 +195,7 @@
 
     <div class="cta-wrap">
       <p class="cta-lead">Tap to find your table.</p>
-      <p class="cta-sub">You&rsquo;ll enter the mobile number you RSVP&rsquo;d with, or your name.</p>
+      <p class="cta-sub">You&rsquo;ll enter the mobile number or name you RSVP&rsquo;d with.</p>
       <button class="cta" id="start" aria-label="Find your table">
         <svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
       </button>
@@ -223,7 +223,7 @@
     <div class="banner"><img src="../white-banner.jpg" alt=""></div>
 
     <h2>Find your table</h2>
-    <p class="lead">Enter the mobile number you RSVP&rsquo;d with. No luck? Try your name instead.</p>
+    <p class="lead">Enter the mobile number you RSVP&rsquo;d with. No luck? Try the name you used.</p>
 
     <div class="field">
       <label for="q" style="position:absolute;left:-9999px">Your name or mobile</label>
@@ -342,7 +342,7 @@
     });
   }
   function renderNone(name){
-    out.innerHTML = '<div class="result show"><p class="hint">No match for \u201c'+esc(name)+'\u201d. Try the mobile number you RSVP\u2019d with, or your full name. A host can help.</p></div>'+again();
+    out.innerHTML = '<div class="result show"><p class="hint">No match for \u201c'+esc(name)+'\u201d. Try the mobile number or name you RSVP\u2019d with. A host can help.</p></div>'+again();
     bindAgain();
   }
   function renderErr(){
